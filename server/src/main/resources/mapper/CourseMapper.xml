@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lyn.server.mapper.CourseMapper">
+  <resultMap id="BaseResultMap" type="com.lyn.server.domain.Course">
+    <id column="course_id" jdbcType="VARCHAR" property="courseId" />
+    <result column="course_type_id" jdbcType="VARCHAR" property="courseTypeId" />
+    <result column="course_category_id" jdbcType="VARCHAR" property="courseCategoryId" />
+    <result column="course_name" jdbcType="VARCHAR" property="courseName" />
+    <result column="author" jdbcType="VARCHAR" property="author" />
+    <result column="author_type" jdbcType="INTEGER" property="authorType" />
+    <result column="course_img" jdbcType="VARCHAR" property="courseImg" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="study_number" jdbcType="INTEGER" property="studyNumber" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="tag" jdbcType="VARCHAR" property="tag" />
+    <result column="value" jdbcType="DOUBLE" property="value" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.lyn.server.domain.Course">
+    <result column="course_des" jdbcType="LONGVARCHAR" property="courseDes" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    course_id, course_type_id, course_category_id, course_name, author, author_type, 
+    course_img, price, create_time, study_number, `state`, tag, `value`
+  </sql>
+  <sql id="Blob_Column_List">
+    course_des
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.lyn.server.domain.CourseExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from course
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.lyn.server.domain.CourseExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from course
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from course
+    where course_id = #{courseId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from course
+    where course_id = #{courseId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.lyn.server.domain.CourseExample">
+    delete from course
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.lyn.server.domain.Course">
+    insert into course (course_id, course_type_id, course_category_id, 
+      course_name, author, author_type, 
+      course_img, price, create_time, 
+      study_number, `state`, tag, 
+      `value`, course_des)
+    values (#{courseId,jdbcType=VARCHAR}, #{courseTypeId,jdbcType=VARCHAR}, #{courseCategoryId,jdbcType=VARCHAR}, 
+      #{courseName,jdbcType=VARCHAR}, #{author,jdbcType=VARCHAR}, #{authorType,jdbcType=INTEGER}, 
+      #{courseImg,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{studyNumber,jdbcType=INTEGER}, #{state,jdbcType=INTEGER}, #{tag,jdbcType=VARCHAR}, 
+      #{value,jdbcType=DOUBLE}, #{courseDes,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lyn.server.domain.Course">
+    insert into course
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="courseId != null">
+        course_id,
+      </if>
+      <if test="courseTypeId != null">
+        course_type_id,
+      </if>
+      <if test="courseCategoryId != null">
+        course_category_id,
+      </if>
+      <if test="courseName != null">
+        course_name,
+      </if>
+      <if test="author != null">
+        author,
+      </if>
+      <if test="authorType != null">
+        author_type,
+      </if>
+      <if test="courseImg != null">
+        course_img,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="studyNumber != null">
+        study_number,
+      </if>
+      <if test="state != null">
+        `state`,
+      </if>
+      <if test="tag != null">
+        tag,
+      </if>
+      <if test="value != null">
+        `value`,
+      </if>
+      <if test="courseDes != null">
+        course_des,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="courseId != null">
+        #{courseId,jdbcType=VARCHAR},
+      </if>
+      <if test="courseTypeId != null">
+        #{courseTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="courseCategoryId != null">
+        #{courseCategoryId,jdbcType=VARCHAR},
+      </if>
+      <if test="courseName != null">
+        #{courseName,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null">
+        #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="authorType != null">
+        #{authorType,jdbcType=INTEGER},
+      </if>
+      <if test="courseImg != null">
+        #{courseImg,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="studyNumber != null">
+        #{studyNumber,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="tag != null">
+        #{tag,jdbcType=VARCHAR},
+      </if>
+      <if test="value != null">
+        #{value,jdbcType=DOUBLE},
+      </if>
+      <if test="courseDes != null">
+        #{courseDes,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.lyn.server.domain.CourseExample" resultType="java.lang.Long">
+    select count(*) from course
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update course
+    <set>
+      <if test="record.courseId != null">
+        course_id = #{record.courseId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.courseTypeId != null">
+        course_type_id = #{record.courseTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.courseCategoryId != null">
+        course_category_id = #{record.courseCategoryId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.courseName != null">
+        course_name = #{record.courseName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.author != null">
+        author = #{record.author,jdbcType=VARCHAR},
+      </if>
+      <if test="record.authorType != null">
+        author_type = #{record.authorType,jdbcType=INTEGER},
+      </if>
+      <if test="record.courseImg != null">
+        course_img = #{record.courseImg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.price != null">
+        price = #{record.price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.studyNumber != null">
+        study_number = #{record.studyNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.state != null">
+        `state` = #{record.state,jdbcType=INTEGER},
+      </if>
+      <if test="record.tag != null">
+        tag = #{record.tag,jdbcType=VARCHAR},
+      </if>
+      <if test="record.value != null">
+        `value` = #{record.value,jdbcType=DOUBLE},
+      </if>
+      <if test="record.courseDes != null">
+        course_des = #{record.courseDes,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update course
+    set course_id = #{record.courseId,jdbcType=VARCHAR},
+      course_type_id = #{record.courseTypeId,jdbcType=VARCHAR},
+      course_category_id = #{record.courseCategoryId,jdbcType=VARCHAR},
+      course_name = #{record.courseName,jdbcType=VARCHAR},
+      author = #{record.author,jdbcType=VARCHAR},
+      author_type = #{record.authorType,jdbcType=INTEGER},
+      course_img = #{record.courseImg,jdbcType=VARCHAR},
+      price = #{record.price,jdbcType=DECIMAL},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      study_number = #{record.studyNumber,jdbcType=INTEGER},
+      `state` = #{record.state,jdbcType=INTEGER},
+      tag = #{record.tag,jdbcType=VARCHAR},
+      `value` = #{record.value,jdbcType=DOUBLE},
+      course_des = #{record.courseDes,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update course
+    set course_id = #{record.courseId,jdbcType=VARCHAR},
+      course_type_id = #{record.courseTypeId,jdbcType=VARCHAR},
+      course_category_id = #{record.courseCategoryId,jdbcType=VARCHAR},
+      course_name = #{record.courseName,jdbcType=VARCHAR},
+      author = #{record.author,jdbcType=VARCHAR},
+      author_type = #{record.authorType,jdbcType=INTEGER},
+      course_img = #{record.courseImg,jdbcType=VARCHAR},
+      price = #{record.price,jdbcType=DECIMAL},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      study_number = #{record.studyNumber,jdbcType=INTEGER},
+      `state` = #{record.state,jdbcType=INTEGER},
+      tag = #{record.tag,jdbcType=VARCHAR},
+      `value` = #{record.value,jdbcType=DOUBLE}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lyn.server.domain.Course">
+    update course
+    <set>
+      <if test="courseTypeId != null">
+        course_type_id = #{courseTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="courseCategoryId != null">
+        course_category_id = #{courseCategoryId,jdbcType=VARCHAR},
+      </if>
+      <if test="courseName != null">
+        course_name = #{courseName,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null">
+        author = #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="authorType != null">
+        author_type = #{authorType,jdbcType=INTEGER},
+      </if>
+      <if test="courseImg != null">
+        course_img = #{courseImg,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="studyNumber != null">
+        study_number = #{studyNumber,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        `state` = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="tag != null">
+        tag = #{tag,jdbcType=VARCHAR},
+      </if>
+      <if test="value != null">
+        `value` = #{value,jdbcType=DOUBLE},
+      </if>
+      <if test="courseDes != null">
+        course_des = #{courseDes,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where course_id = #{courseId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.lyn.server.domain.Course">
+    update course
+    set course_type_id = #{courseTypeId,jdbcType=VARCHAR},
+      course_category_id = #{courseCategoryId,jdbcType=VARCHAR},
+      course_name = #{courseName,jdbcType=VARCHAR},
+      author = #{author,jdbcType=VARCHAR},
+      author_type = #{authorType,jdbcType=INTEGER},
+      course_img = #{courseImg,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      study_number = #{studyNumber,jdbcType=INTEGER},
+      `state` = #{state,jdbcType=INTEGER},
+      tag = #{tag,jdbcType=VARCHAR},
+      `value` = #{value,jdbcType=DOUBLE},
+      course_des = #{courseDes,jdbcType=LONGVARCHAR}
+    where course_id = #{courseId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lyn.server.domain.Course">
+    update course
+    set course_type_id = #{courseTypeId,jdbcType=VARCHAR},
+      course_category_id = #{courseCategoryId,jdbcType=VARCHAR},
+      course_name = #{courseName,jdbcType=VARCHAR},
+      author = #{author,jdbcType=VARCHAR},
+      author_type = #{authorType,jdbcType=INTEGER},
+      course_img = #{courseImg,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      study_number = #{studyNumber,jdbcType=INTEGER},
+      `state` = #{state,jdbcType=INTEGER},
+      tag = #{tag,jdbcType=VARCHAR},
+      `value` = #{value,jdbcType=DOUBLE}
+    where course_id = #{courseId,jdbcType=VARCHAR}
+  </update>
+</mapper>
