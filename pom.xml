@@ -38,8 +38,8 @@
 				<version>8.0.23</version>
 			</dependency>
 			<dependency>
-				<artifactId>server</artifactId>
 				<groupId>com.lyn</groupId>
+				<artifactId>server</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>

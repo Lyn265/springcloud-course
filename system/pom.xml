@@ -32,9 +32,8 @@
             <artifactId>spring-boot-devtools</artifactId>
         </dependency>
         <dependency>
-            <artifactId>server</artifactId>
             <groupId>com.lyn</groupId>
-            <version>0.0.1-SNAPSHOT</version>
+            <artifactId>server</artifactId>
         </dependency>
     </dependencies>
 
