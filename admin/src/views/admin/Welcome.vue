@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>欢迎</h1>
+    <h1>欢迎来到视频教程</h1>
   </div>
 </template>
 
