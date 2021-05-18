@@ -18,8 +18,7 @@ public class ChapterService {
 
     public List<ChapterDto> list() {
         ChapterExample chapterExample = new ChapterExample();
-        chapterExample.createCriteria().andIdEqualTo("00000001");
-        chapterExample.setOrderByClause("id desc");
+        chapterExample.setOrderByClause("id asc");
         List<Chapter> chapters = chapterMapper.selectByExample(chapterExample);
         List<ChapterDto> chapterDtoList = new ArrayList<>();
         ChapterDto chapterDto = new ChapterDto();

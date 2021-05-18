@@ -16,7 +16,7 @@
           <a href="index.html" class="navbar-brand">
             <small>
               <i class="fa fa-leaf"></i>
-              Ace Admin
+              在线管理视频教程
             </small>
           </a>
         </div>
@@ -473,7 +473,7 @@
       let _this = this;
       $('body').removeClass( 'login-layout light-login');
       $('body').attr( 'class','no-skin');
-      _this.activeSidebar(this.$route.name.replace('/','-')+'-sidebar');
+      _this.activeSidebar(_this.$route.name.replace('/','-')+'-sidebar');
     },
     watch:{
       $route:{
