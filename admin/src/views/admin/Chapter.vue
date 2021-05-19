@@ -1,7 +1,7 @@
 <template>
   <div>
     <p>
-      <button class="btn btn-white btn-default btn-round" @click="add()">
+      <button class="btn btn-white btn-default btn-round" @click="showAdd()">
         <i class="ace-icon fa fa-edit"></i>
         新增
       </button>
@@ -28,56 +28,49 @@
           <td>{{chapter.name}}</td>
           <td>
             <div class="hidden-sm hidden-xs btn-group">
-              <button class="btn btn-xs btn-success">
-                <i class="ace-icon fa fa-check bigger-120"></i>
-              </button>
 
-              <button class="btn btn-xs btn-info">
+              <button class="btn btn-xs btn-info" @click="showEdit(chapter)">
                 <i class="ace-icon fa fa-pencil bigger-120"></i>
               </button>
 
-              <button class="btn btn-xs btn-danger">
+              <button class="btn btn-xs btn-danger" @click="remove(chapter.id)">
                 <i class="ace-icon fa fa-trash-o bigger-120"></i>
               </button>
-
-              <button class="btn btn-xs btn-warning">
-                <i class="ace-icon fa fa-flag bigger-120"></i>
-              </button>
             </div>
-            <div class="hidden-md hidden-lg">
-              <div class="inline pos-rel">
-                <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-                  <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-                </button>
+<!--            <div class="hidden-md hidden-lg">-->
+<!--              <div class="inline pos-rel">-->
+<!--                <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">-->
+<!--                  <i class="ace-icon fa fa-cog icon-only bigger-110"></i>-->
+<!--                </button>-->
 
-                <ul
-                  class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                  <li>
-                    <a href="#" class="tooltip-info" data-rel="tooltip" title="View">
-																			<span class="blue">
-																				<i class="ace-icon fa fa-search-plus bigger-120"></i>
-																			</span>
-                    </a>
-                  </li>
+<!--                <ul-->
+<!--                  class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">-->
+<!--                  <li>-->
+<!--                    <a href="#" class="tooltip-info" data-rel="tooltip" title="View">-->
+<!--																			<span class="blue">-->
+<!--																				<i class="ace-icon fa fa-search-plus bigger-120"></i>-->
+<!--																			</span>-->
+<!--                    </a>-->
+<!--                  </li>-->
 
-                  <li>
-                    <a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
-																			<span class="green">
-																				<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																			</span>
-                    </a>
-                  </li>
+<!--                  <li>-->
+<!--                    <a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">-->
+<!--																			<span class="green">-->
+<!--																				<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>-->
+<!--																			</span>-->
+<!--                    </a>-->
+<!--                  </li>-->
 
-                  <li>
-                    <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
-																			<span class="red">
-																				<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																			</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
+<!--                  <li>-->
+<!--                    <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">-->
+<!--																			<span class="red">-->
+<!--																				<i class="ace-icon fa fa-trash-o bigger-120"></i>-->
+<!--																			</span>-->
+<!--                    </a>-->
+<!--                  </li>-->
+<!--                </ul>-->
+<!--              </div>-->
+<!--            </div>-->
           </td>
         </tr>
 
@@ -201,20 +194,20 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">名称</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control" placeholder="名称">
+                  <input v-model="chapter.name" type="text" class="form-control" placeholder="名称">
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label">课程ID</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control" placeholder="课程ID">
+                  <input v-model="chapter.courseId" type="text" class="form-control" placeholder="课程ID">
                 </div>
               </div>
             </form>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-            <button type="button" class="btn btn-primary">保存</button>
+            <button type="button" class="btn btn-primary" @click="save()">保存</button>
           </div>
         </div>
       </div>
@@ -224,6 +217,9 @@
 
 <script>
   import Pagination from "../../components/Pagination";
+  import {toast} from "../../utils/toast";
+  import {Confirm} from "../../utils/confirm";
+
   export default {
     name: "Chapter",
     components:{
@@ -231,6 +227,7 @@
     },
     data(){
       return {
+        chapter:{},
         chapters:[],
       }
     },
@@ -242,20 +239,60 @@
     methods:{
       list(page){
         let _this = this;
-        _this.$api.post("http://localhost:9000/business/admin/list",
+        Loading.show();
+        _this.$api.post("http://localhost:9000/business/admin/chapter/list",
           {
             page:page,
             size:_this.$refs.pagination.size
           }
         ).then(resp =>{
+          Loading.hide();
           this.chapters = resp.data.list;
           _this.$refs.pagination.render(page,resp.data.total);
 
         })
       },
-      add(){
+      showAdd(){
+        let _this = this;
+        _this.chapter = {};
         $('#myModal').modal('show');
-      }
+      },
+      showEdit(chapter){
+        let _this = this;
+        _this.chapter = Object.assign({},chapter);
+        $('#myModal').modal('show');
+      },
+      save(){
+        Loading.show();
+        let _this = this;
+        _this.$api.post("http://localhost:9000/business/admin/chapter/save",
+          _this.chapter,
+        ).then(resp =>{
+          Loading.hide();
+          let response = resp.data;
+          if(response.success){
+            $('#myModal').modal('hide');
+            _this.list(1);
+            toast.success("保存成功");
+          }
+        })
+      },
+      remove(id){
+        let _this = this;
+        Confirm.show('删除后不可恢复，确认删除？',function () {
+          Loading.show();
+          _this.$api.delete("http://localhost:9000/business/admin/chapter/delete/"+id
+          ).then(resp =>{
+            Loading.hide();
+            let response = resp.data;
+            if(response.success){
+              _this.list(1);
+              toast.success("删除成功");
+            }
+          });
+        })
+      },
+
     }
   }
 </script>
