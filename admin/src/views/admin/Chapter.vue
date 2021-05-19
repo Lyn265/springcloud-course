@@ -1,6 +1,17 @@
 <template>
-  <div class="row">
-    <div class="col-xs-12">
+  <div>
+    <p>
+      <button class="btn btn-white btn-default btn-round" @click="add()">
+        <i class="ace-icon fa fa-edit"></i>
+        新增
+      </button>
+      &nbsp;
+      <button class="btn btn-white btn-default btn-round" @click="list(1)">
+        <i class="ace-icon fa fa-refresh"></i>
+        刷新
+      </button>
+    </p>
+    <Pagination ref="pagination" v-bind:list="list" v-bind:itemCount="5"></Pagination>
       <table id="simple-table" class="table  table-bordered table-hover">
         <thead>
         <tr>
@@ -177,13 +188,47 @@
         </tr>
         </tbody>
       </table>
-    </div><!-- /.span -->
-  </div><!-- /.row -->
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">课程</h4>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">名称</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" placeholder="名称">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">课程ID</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" placeholder="课程ID">
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-primary">保存</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
+  import Pagination from "../../components/Pagination";
   export default {
     name: "Chapter",
+    components:{
+      Pagination,
+    },
     data(){
       return {
         chapters:[],
@@ -191,9 +236,26 @@
     },
     mounted() {
       let _this = this;
-      _this.$api.get("http://localhost:9002/business/admin/chapter").then(resp =>{
-        this.chapters = resp.data;
-      })
+      _this.list(1);
+
+    },
+    methods:{
+      list(page){
+        let _this = this;
+        _this.$api.post("http://localhost:9000/business/admin/list",
+          {
+            page:page,
+            size:_this.$refs.pagination.size
+          }
+        ).then(resp =>{
+          this.chapters = resp.data.list;
+          _this.$refs.pagination.render(page,resp.data.total);
+
+        })
+      },
+      add(){
+        $('#myModal').modal('show');
+      }
     }
   }
 </script>

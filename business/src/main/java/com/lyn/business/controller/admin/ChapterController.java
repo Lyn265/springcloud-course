@@ -1,10 +1,9 @@
 package com.lyn.business.controller.admin;
 
 import com.lyn.server.dto.ChapterDto;
+import com.lyn.server.dto.PageDto;
 import com.lyn.server.service.ChapterService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -15,8 +14,9 @@ public class ChapterController {
     @Resource
     ChapterService chapterService;
 
-    @GetMapping("/chapter")
-    public List<ChapterDto> list(){
-        return chapterService.list();
+    @PostMapping("/list")
+    public PageDto list(@RequestBody PageDto pageDto){
+        chapterService.list(pageDto);
+        return  pageDto;
     }
 }
