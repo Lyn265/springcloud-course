@@ -2,7 +2,7 @@ package com.lyn.generator.test;
 
 public class Test {
     /**
-    * ID
+    * ID123
     */
     private String id;
 }
