@@ -1,4 +1,4 @@
-package com.lyn.business.controller.admin;
+package com.lyn.${module}.controller.admin;
 
 import com.lyn.server.dto.${Domain}Dto;
 import com.lyn.server.dto.PageDto;
@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("/admin/${domain}")
 public class ${Domain}Controller {
 
-    public static final String BUSINESS_NAME = "大章";
+    public static final String BUSINESS_NAME = "${tableNameCn}";
     @Resource
     ${Domain}Service ${domain}Service;
 

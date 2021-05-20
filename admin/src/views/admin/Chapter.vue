@@ -263,6 +263,7 @@
         $('#myModal').modal('show');
       },
       save(){
+        let _this = this;
         Loading.show();
         _this.$api.post("http://localhost:9000/business/admin/chapter/save",
           _this.chapter,

@@ -1,9 +1,9 @@
 package com.lyn.business.controller.admin;
 
-import com.lyn.server.dto.SectionDto;
+import com.lyn.server.dto.CourseDto;
 import com.lyn.server.dto.PageDto;
 import com.lyn.server.dto.ResponseDto;
-import com.lyn.server.service.SectionService;
+import com.lyn.server.service.CourseService;
 import com.lyn.server.util.ValidatorUtil;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,33 +11,33 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin/section")
-public class SectionController {
+@RequestMapping("/admin/course")
+public class CourseController {
 
-    public static final String BUSINESS_NAME = "小节";
+    public static final String BUSINESS_NAME = "课程";
     @Resource
-    SectionService sectionService;
+    CourseService courseService;
 
     @PostMapping("/list")
     public PageDto list(@RequestBody PageDto pageDto){
-        sectionService.list(pageDto);
+        courseService.list(pageDto);
         return  pageDto;
     }
 
     @PostMapping("/save")
-    public ResponseDto save(@RequestBody SectionDto sectionDto){
-//        ValidatorUtil.require(sectionDto.getName(),"名称");
-//        ValidatorUtil.require(sectionDto.getCourseId(),"课程ID");
-//        ValidatorUtil.length(sectionDto.getCourseId(),"课程ID",1,8);
+    public ResponseDto save(@RequestBody CourseDto courseDto){
+//        ValidatorUtil.require(courseDto.getName(),"名称");
+//        ValidatorUtil.require(courseDto.getCourseId(),"课程ID");
+//        ValidatorUtil.length(courseDto.getCourseId(),"课程ID",1,8);
         ResponseDto responseDto = new ResponseDto();
-         sectionService.save(sectionDto);
-         responseDto.setContent(sectionDto);
+         courseService.save(courseDto);
+         responseDto.setContent(courseDto);
          return responseDto;
     }
     @DeleteMapping("/delete/{id}")
     public ResponseDto delete(@PathVariable String id){
         ResponseDto responseDto = new ResponseDto();
-        sectionService.delete(id);
+        courseService.delete(id);
         return responseDto;
     }
 }
