@@ -13,21 +13,30 @@ const Toast = Swal.mixin({
 
 export const toast = {
   success(message){
-    Toast.fire({
+    Swal.fire({
+      position: 'top-end',
       icon: 'success',
-      title: message
+      title: message,
+      showConfirmButton: false,
+      timer: 3000
     })
   },
   error(message){
-    Toast.fire({
+    Swal.fire({
+      position: 'top-end',
       icon: 'error',
-      title: message
+      title: message,
+      showConfirmButton: false,
+      timer: 3000
     })
   },
   warning(message){
-    Toast.fire({
+    Swal.fire({
+      position: 'top-end',
       icon: 'warning',
-      title: message
+      title: message,
+      showConfirmButton: false,
+      timer: 3000
     })
   },
 

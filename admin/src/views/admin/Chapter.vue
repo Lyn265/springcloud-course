@@ -264,7 +264,6 @@
       },
       save(){
         Loading.show();
-        let _this = this;
         _this.$api.post("http://localhost:9000/business/admin/chapter/save",
           _this.chapter,
         ).then(resp =>{
@@ -274,6 +273,8 @@
             $('#myModal').modal('hide');
             _this.list(1);
             toast.success("保存成功");
+          }else {
+            toast.warning(response.msg);
           }
         })
       },
@@ -288,6 +289,8 @@
             if(response.success){
               _this.list(1);
               toast.success("删除成功");
+            }else{
+              toast.warning(response.msg);
             }
           });
         })
