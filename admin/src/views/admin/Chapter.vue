@@ -219,6 +219,7 @@
   import Pagination from "../../components/Pagination";
   import {toast} from "../../utils/toast";
   import {Confirm} from "../../utils/confirm";
+  import {Validator} from "../../utils/validator";
 
   export default {
     name: "Chapter",
@@ -264,6 +265,11 @@
       },
       save(){
         let _this = this;
+        if(!Validator.require(_this.chapter.name,'名称') ||
+           !Validator.require(_this.chapter.name,'课程ID') ||
+           !Validator.length(_this.chapter.name,'课程ID',1,8)){
+              return ;
+        }
         Loading.show();
         _this.$api.post("/business/admin/chapter/save",
           _this.chapter,

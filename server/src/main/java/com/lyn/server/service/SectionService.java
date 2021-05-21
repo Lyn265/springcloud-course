@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Date;
 
 @Service
 public class SectionService {
@@ -23,6 +24,7 @@ public class SectionService {
     public void list(PageDto pageDto) {
         PageHelper.startPage(pageDto.getPage(),pageDto.getSize());
         SectionExample example = new SectionExample();
+            example.setOrderByClause("sort asc");
         List<Section> sections = sectionMapper.selectByExample(example);
         PageInfo<Section> pageInfo = new PageInfo<>(sections);
         pageDto.setTotal(pageInfo.getTotal());
@@ -46,9 +48,14 @@ public class SectionService {
     }
     private void insert(Section section) {
         section.setId(UuidUtil.getShortUuid());
+            Date now = new Date();
+            section.setCreatedAt(now);
+            section.setUpdatedAt(now);
         sectionMapper.insert(section);
     }
     private void update(Section section) {
+            Date now = new Date();
+            section.setUpdatedAt(now);
         sectionMapper.updateByPrimaryKey(section);
     }
 

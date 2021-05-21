@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Date;
 
 @Service
 public class ${Domain}Service {
@@ -23,6 +24,11 @@ public class ${Domain}Service {
     public void list(PageDto pageDto) {
         PageHelper.startPage(pageDto.getPage(),pageDto.getSize());
         ${Domain}Example example = new ${Domain}Example();
+        <#list fieldList as field>
+        <#if field.nameHump='sort'>
+            example.setOrderByClause("sort asc");
+        </#if>
+        </#list>
         List<${Domain}> ${domain}s = ${domain}Mapper.selectByExample(example);
         PageInfo<${Domain}> pageInfo = new PageInfo<>(${domain}s);
         pageDto.setTotal(pageInfo.getTotal());
@@ -46,9 +52,24 @@ public class ${Domain}Service {
     }
     private void insert(${Domain} ${domain}) {
         ${domain}.setId(UuidUtil.getShortUuid());
+            Date now = new Date();
+    <#list fieldList as field>
+        <#if field.nameHump='createdAt'>
+            ${domain}.setCreatedAt(now);
+        </#if>
+        <#if field.nameHump='updatedAt'>
+            ${domain}.setUpdatedAt(now);
+        </#if>
+    </#list>
         ${domain}Mapper.insert(${domain});
     }
     private void update(${Domain} ${domain}) {
+            Date now = new Date();
+    <#list fieldList as field>
+        <#if field.nameHump='updatedAt'>
+            ${domain}.setUpdatedAt(now);
+        </#if>
+    </#list>
         ${domain}Mapper.updateByPrimaryKey(${domain});
     }
 

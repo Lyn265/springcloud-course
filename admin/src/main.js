@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from "./router";
 import axios from "axios";
 import Swal from "sweetalert2";
+import * as  filters  from "./filter/filter";
 // If you don't need the styles, do not connect
 Vue.config.productionTip = false;
 Vue.prototype.$api = axios;
@@ -19,6 +20,11 @@ axios.interceptors.response.use((response) =>{
   console.log("返回结果:",response);
     return response;
 },  error => {});
+
+//全局过滤器
+Object.keys(filters).forEach(key => {
+  Vue.filter(key,filters[key]);
+})
 
 
 new Vue({
