@@ -8,8 +8,22 @@ Vue.config.productionTip = false;
 Vue.prototype.$api = axios;
 Vue.prototype.$swal = Swal;
 
+axios.defaults.baseURL=process.env.VUE_APP_SERVER;
+axios.defaults.timeout=30000;
+axios.interceptors.request.use((config) =>{
+    console.log("请求:",config);
+    return config;
+},error => {}
+);
+axios.interceptors.response.use((response) =>{
+  console.log("返回结果:",response);
+    return response;
+},  error => {});
+
 
 new Vue({
   router,
   render: h => h(App),
-}).$mount('#app')
+}).$mount('#app');
+
+console.log("server:"+process.env.VUE_APP_SERVER);

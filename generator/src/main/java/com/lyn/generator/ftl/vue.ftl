@@ -14,26 +14,24 @@
     <Pagination ref="pagination" v-bind:list="list" v-bind:itemCount="5"></Pagination>
       <table id="simple-table" class="table  table-bordered table-hover">
         <thead>
-        <tr>
-          <th>ID</th>
-          <th>课程ID</th>
-          <th>名称</th>
+        <tr><#list fieldList as field>
+            <th>${field.nameCn}</th></#list>
           <th>操作</th>
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(chapter,index) in chapters" :key="index">
-          <td>{{chapter.id}}</td>
-          <td class="hidden-480">{{chapter.courseId}}</td>
-          <td>{{chapter.name}}</td>
+        <tr v-for="(${domain},index) in ${domain}s" :key="index">
+        <#list fieldList as field>
+          <td>{{${domain}.${field.nameHump}}}</td>
+        </#list>
           <td>
             <div class="hidden-sm hidden-xs btn-group">
 
-              <button class="btn btn-xs btn-info" @click="showEdit(chapter)">
+              <button class="btn btn-xs btn-info" @click="showEdit(${domain})">
                 <i class="ace-icon fa fa-pencil bigger-120"></i>
               </button>
 
-              <button class="btn btn-xs btn-danger" @click="remove(chapter.id)">
+              <button class="btn btn-xs btn-danger" @click="remove(${domain}.id)">
                 <i class="ace-icon fa fa-trash-o bigger-120"></i>
               </button>
             </div>
@@ -191,18 +189,14 @@
           </div>
           <div class="modal-body">
             <form class="form-horizontal">
-              <div class="form-group">
-                <label class="col-sm-2 control-label">名称</label>
-                <div class="col-sm-10">
-                  <input v-model="chapter.name" type="text" class="form-control" placeholder="名称">
+              <#list fieldList as field>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">${field.nameCn}</label>
+                  <div class="col-sm-10">
+                    <input v-model="${domain}.${field.nameHump}" type="text" class="form-control" placeholder="${field.nameCn}">
+                  </div>
                 </div>
-              </div>
-              <div class="form-group">
-                <label class="col-sm-2 control-label">课程ID</label>
-                <div class="col-sm-10">
-                  <input v-model="chapter.courseId" type="text" class="form-control" placeholder="课程ID">
-                </div>
-              </div>
+              </#list>
             </form>
           </div>
           <div class="modal-footer">
@@ -221,14 +215,14 @@
   import {Confirm} from "../../utils/confirm";
 
   export default {
-    name: "Chapter",
+    name: "${Domain}",
     components:{
       Pagination,
     },
     data(){
       return {
-        chapter:{},
-        chapters:[],
+        ${domain}:{},
+        ${domain}s:[],
       }
     },
     mounted() {
@@ -240,33 +234,33 @@
       list(page){
         let _this = this;
         Loading.show();
-        _this.$api.post("/business/admin/chapter/list",
+        _this.$api.post("/business/admin/${domain}/list",
           {
             page:page,
             size:_this.$refs.pagination.size
           }
         ).then(resp =>{
           Loading.hide();
-          this.chapters = resp.data.list;
+          this.${domain}s = resp.data.list;
           _this.$refs.pagination.render(page,resp.data.total);
 
         })
       },
       showAdd(){
         let _this = this;
-        _this.chapter = {};
+        _this.${domain} = {};
         $('#myModal').modal('show');
       },
-      showEdit(chapter){
+      showEdit(${domain}){
         let _this = this;
-        _this.chapter = Object.assign({},chapter);
+        _this.${domain} = Object.assign({},${domain});
         $('#myModal').modal('show');
       },
       save(){
         let _this = this;
         Loading.show();
-        _this.$api.post("/business/admin/chapter/save",
-          _this.chapter,
+        _this.$api.post("/business/admin/${domain}/save",
+          _this.${domain},
         ).then(resp =>{
           Loading.hide();
           let response = resp.data;
@@ -283,7 +277,7 @@
         let _this = this;
         Confirm.show('删除后不可恢复，确认删除？',function () {
           Loading.show();
-          _this.$api.delete("/business/admin/chapter/delete/"+id
+          _this.$api.delete("/business/admin/${domain}/delete/"+id
           ).then(resp =>{
             Loading.hide();
             let response = resp.data;

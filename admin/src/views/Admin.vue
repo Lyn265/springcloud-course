@@ -407,6 +407,10 @@
                   <i class="menu-icon fa fa-caret-right"></i>
                   大章管理
                 </router-link>
+                <router-link to="/business/section">
+                  <i class="menu-icon fa fa-caret-right"></i>
+                  小节管理
+                </router-link>
                 <b class="arrow"></b>
               </li>
             </ul>

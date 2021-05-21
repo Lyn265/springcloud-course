@@ -15,25 +15,39 @@
       <table id="simple-table" class="table  table-bordered table-hover">
         <thead>
         <tr>
-          <th>ID</th>
-          <th>课程ID</th>
-          <th>名称</th>
+            <th>ID</th>
+            <th>标题</th>
+            <th>课程</th>
+            <th>大章</th>
+            <th>视频</th>
+            <th>时长</th>
+            <th>收费</th>
+            <th>顺序</th>
+            <th>创建时间</th>
+            <th>修改时间</th>
           <th>操作</th>
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(chapter,index) in chapters" :key="index">
-          <td>{{chapter.id}}</td>
-          <td class="hidden-480">{{chapter.courseId}}</td>
-          <td>{{chapter.name}}</td>
+        <tr v-for="(section,index) in sections" :key="index">
+          <td>{{section.id}}</td>
+          <td>{{section.title}}</td>
+          <td>{{section.courseId}}</td>
+          <td>{{section.chapterId}}</td>
+          <td>{{section.video}}</td>
+          <td>{{section.time}}</td>
+          <td>{{section.charge}}</td>
+          <td>{{section.sort}}</td>
+          <td>{{section.createdAt}}</td>
+          <td>{{section.updatedAt}}</td>
           <td>
             <div class="hidden-sm hidden-xs btn-group">
 
-              <button class="btn btn-xs btn-info" @click="showEdit(chapter)">
+              <button class="btn btn-xs btn-info" @click="showEdit(section)">
                 <i class="ace-icon fa fa-pencil bigger-120"></i>
               </button>
 
-              <button class="btn btn-xs btn-danger" @click="remove(chapter.id)">
+              <button class="btn btn-xs btn-danger" @click="remove(section.id)">
                 <i class="ace-icon fa fa-trash-o bigger-120"></i>
               </button>
             </div>
@@ -191,18 +205,66 @@
           </div>
           <div class="modal-body">
             <form class="form-horizontal">
-              <div class="form-group">
-                <label class="col-sm-2 control-label">名称</label>
-                <div class="col-sm-10">
-                  <input v-model="chapter.name" type="text" class="form-control" placeholder="名称">
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">ID</label>
+                  <div class="col-sm-10">
+                    <input v-model="section.id" type="text" class="form-control" placeholder="ID">
+                  </div>
                 </div>
-              </div>
-              <div class="form-group">
-                <label class="col-sm-2 control-label">课程ID</label>
-                <div class="col-sm-10">
-                  <input v-model="chapter.courseId" type="text" class="form-control" placeholder="课程ID">
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">标题</label>
+                  <div class="col-sm-10">
+                    <input v-model="section.title" type="text" class="form-control" placeholder="标题">
+                  </div>
                 </div>
-              </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">课程</label>
+                  <div class="col-sm-10">
+                    <input v-model="section.courseId" type="text" class="form-control" placeholder="课程">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">大章</label>
+                  <div class="col-sm-10">
+                    <input v-model="section.chapterId" type="text" class="form-control" placeholder="大章">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">视频</label>
+                  <div class="col-sm-10">
+                    <input v-model="section.video" type="text" class="form-control" placeholder="视频">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">时长</label>
+                  <div class="col-sm-10">
+                    <input v-model="section.time" type="text" class="form-control" placeholder="时长">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">收费</label>
+                  <div class="col-sm-10">
+                    <input v-model="section.charge" type="text" class="form-control" placeholder="收费">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">顺序</label>
+                  <div class="col-sm-10">
+                    <input v-model="section.sort" type="text" class="form-control" placeholder="顺序">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">创建时间</label>
+                  <div class="col-sm-10">
+                    <input v-model="section.createdAt" type="text" class="form-control" placeholder="创建时间">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">修改时间</label>
+                  <div class="col-sm-10">
+                    <input v-model="section.updatedAt" type="text" class="form-control" placeholder="修改时间">
+                  </div>
+                </div>
             </form>
           </div>
           <div class="modal-footer">
@@ -221,14 +283,14 @@
   import {Confirm} from "../../utils/confirm";
 
   export default {
-    name: "Chapter",
+    name: "Section",
     components:{
       Pagination,
     },
     data(){
       return {
-        chapter:{},
-        chapters:[],
+        section:{},
+        sections:[],
       }
     },
     mounted() {
@@ -240,33 +302,33 @@
       list(page){
         let _this = this;
         Loading.show();
-        _this.$api.post("/business/admin/chapter/list",
+        _this.$api.post("/business/admin/section/list",
           {
             page:page,
             size:_this.$refs.pagination.size
           }
         ).then(resp =>{
           Loading.hide();
-          this.chapters = resp.data.list;
+          this.sections = resp.data.list;
           _this.$refs.pagination.render(page,resp.data.total);
 
         })
       },
       showAdd(){
         let _this = this;
-        _this.chapter = {};
+        _this.section = {};
         $('#myModal').modal('show');
       },
-      showEdit(chapter){
+      showEdit(section){
         let _this = this;
-        _this.chapter = Object.assign({},chapter);
+        _this.section = Object.assign({},section);
         $('#myModal').modal('show');
       },
       save(){
         let _this = this;
         Loading.show();
-        _this.$api.post("/business/admin/chapter/save",
-          _this.chapter,
+        _this.$api.post("/business/admin/section/save",
+          _this.section,
         ).then(resp =>{
           Loading.hide();
           let response = resp.data;
@@ -283,7 +345,7 @@
         let _this = this;
         Confirm.show('删除后不可恢复，确认删除？',function () {
           Loading.show();
-          _this.$api.delete("/business/admin/chapter/delete/"+id
+          _this.$api.delete("/business/admin/section/delete/"+id
           ).then(resp =>{
             Loading.hide();
             let response = resp.data;
