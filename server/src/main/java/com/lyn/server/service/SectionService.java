@@ -10,6 +10,7 @@ import com.lyn.server.mapper.SectionMapper;
 import com.lyn.server.util.CopyUtil;
 import com.lyn.server.util.UuidUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
@@ -48,7 +49,7 @@ public class SectionService {
 //        }
         sectionPageDto.setList(sectionDtoList);
     }
-
+    @Transactional
     public void save(SectionDto sectionDto) {
         Section section = CopyUtil.copy(sectionDto,Section.class);
         if(StringUtils.isEmpty(sectionDto.getId())){

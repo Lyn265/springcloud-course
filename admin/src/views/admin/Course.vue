@@ -47,7 +47,7 @@
                 排序:{{course.sort}}
               </span>&nbsp;
               <span class="badge badge-info">
-                时长:{{course.time}}
+                时长:{{course.time | formatSecond}}
               </span>
             </p>
             <p>

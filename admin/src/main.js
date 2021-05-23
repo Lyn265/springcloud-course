@@ -4,6 +4,7 @@ import router from "./router";
 import axios from "axios";
 import Swal from "sweetalert2";
 import * as  filters  from "./filter/filter";
+import {toast} from "./utils/toast";
 // If you don't need the styles, do not connect
 Vue.config.productionTip = false;
 Vue.prototype.$api = axios;
@@ -19,7 +20,12 @@ axios.interceptors.request.use((config) =>{
 axios.interceptors.response.use((response) =>{
   console.log("返回结果:",response);
     return response;
-},  error => {});
+},  error => {
+  if(error.response.status === 500){
+    toast.error("系统异常");
+  }
+  return;
+});
 
 //全局过滤器
 Object.keys(filters).forEach(key => {

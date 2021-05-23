@@ -1,12 +1,26 @@
-package com.lyn.server.domain;
+package com.lyn.server.dto;
 
-public class Category {
+
+public class CategoryDto {
+
+    /**
+     * id
+     */
     private String id;
 
+    /**
+     * 父id
+     */
     private String parent;
 
+    /**
+     * 名称
+     */
     private String name;
 
+    /**
+     * 顺序
+     */
     private Integer sort;
 
     public String getId() {
@@ -41,6 +55,7 @@ public class Category {
         this.sort = sort;
     }
 
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -54,4 +69,5 @@ public class Category {
         sb.append("]");
         return sb.toString();
     }
+
 }

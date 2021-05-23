@@ -2,15 +2,16 @@ package com.lyn.server.mapper;
 
 import com.lyn.server.domain.Category;
 import com.lyn.server.domain.CategoryExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface CategoryMapper {
     long countByExample(CategoryExample example);
 
     int deleteByExample(CategoryExample example);
 
-    int deleteByPrimaryKey(Long id);
+    int deleteByPrimaryKey(String id);
 
     int insert(Category record);
 
@@ -18,7 +19,7 @@ public interface CategoryMapper {
 
     List<Category> selectByExample(CategoryExample example);
 
-    Category selectByPrimaryKey(Long id);
+    Category selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") Category record, @Param("example") CategoryExample example);
 

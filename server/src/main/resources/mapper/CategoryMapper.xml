@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lyn.server.mapper.CategoryMapper">
   <resultMap id="BaseResultMap" type="com.lyn.server.domain.Category">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="parent" jdbcType="BIGINT" property="parent" />
+    <id column="id" jdbcType="CHAR" property="id" />
+    <result column="parent" jdbcType="CHAR" property="parent" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="sort" jdbcType="INTEGER" property="sort" />
   </resultMap>
@@ -82,15 +82,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from category
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=CHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from category
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=CHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.lyn.server.domain.CategoryExample">
     delete from category
@@ -99,10 +99,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.lyn.server.domain.Category">
-    insert into category (id, parent, `name`, 
-      sort)
-    values (#{id,jdbcType=BIGINT}, #{parent,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
-      #{sort,jdbcType=INTEGER})
+    insert into category (id, parent, `name`, sort
+      )
+    values (#{id,jdbcType=CHAR}, #{parent,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.lyn.server.domain.Category">
     insert into category
@@ -122,10 +122,10 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
-        #{id,jdbcType=BIGINT},
+        #{id,jdbcType=CHAR},
       </if>
       <if test="parent != null">
-        #{parent,jdbcType=BIGINT},
+        #{parent,jdbcType=CHAR},
       </if>
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
@@ -145,10 +145,10 @@
     update category
     <set>
       <if test="record.id != null">
-        id = #{record.id,jdbcType=BIGINT},
+        id = #{record.id,jdbcType=CHAR},
       </if>
       <if test="record.parent != null">
-        parent = #{record.parent,jdbcType=BIGINT},
+        parent = #{record.parent,jdbcType=CHAR},
       </if>
       <if test="record.name != null">
         `name` = #{record.name,jdbcType=VARCHAR},
@@ -163,8 +163,8 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update category
-    set id = #{record.id,jdbcType=BIGINT},
-      parent = #{record.parent,jdbcType=BIGINT},
+    set id = #{record.id,jdbcType=CHAR},
+      parent = #{record.parent,jdbcType=CHAR},
       `name` = #{record.name,jdbcType=VARCHAR},
       sort = #{record.sort,jdbcType=INTEGER}
     <if test="_parameter != null">
@@ -175,7 +175,7 @@
     update category
     <set>
       <if test="parent != null">
-        parent = #{parent,jdbcType=BIGINT},
+        parent = #{parent,jdbcType=CHAR},
       </if>
       <if test="name != null">
         `name` = #{name,jdbcType=VARCHAR},
@@ -184,13 +184,13 @@
         sort = #{sort,jdbcType=INTEGER},
       </if>
     </set>
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=CHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.lyn.server.domain.Category">
     update category
-    set parent = #{parent,jdbcType=BIGINT},
+    set parent = #{parent,jdbcType=CHAR},
       `name` = #{name,jdbcType=VARCHAR},
       sort = #{sort,jdbcType=INTEGER}
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=CHAR}
   </update>
 </mapper>

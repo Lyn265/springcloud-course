@@ -37,7 +37,7 @@
           <td>{{section.id}}</td>
           <td>{{section.title}}</td>
           <td>{{section.video}}</td>
-          <td>{{section.time}}</td>
+          <td>{{section.time | formatSecond}}</td>
           <td>{{SECTION_CHARGE | optionKV(section.charge)}}</td>
           <td>{{section.sort}}</td>
           <td>{{section.vod}}</td>
@@ -307,6 +307,7 @@
           _this.section,
         ).then(resp =>{
           Loading.hide();
+          if(resp){
           let response = resp.data;
           if(response.success){
             $('#myModal').modal('hide');
@@ -314,6 +315,7 @@
             toast.success("保存成功");
           }else {
             toast.warning(response.msg);
+          }
           }
         })
       },
