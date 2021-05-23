@@ -1,7 +1,8 @@
 package com.lyn.server.dto;
 
-import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.util.Date;
 
 public class SectionDto {
 
@@ -48,13 +49,13 @@ public class SectionDto {
     /**
      * 创建时间
      */
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+9")
     private Date createdAt;
 
     /**
      * 修改时间
      */
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+9")
     private Date updatedAt;
 
     /**

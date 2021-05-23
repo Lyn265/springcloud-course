@@ -17,7 +17,7 @@ public class ${Domain}Dto {
      * ${field.comment}
      */
     <#if field.javaType=='Date'>
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+9")
     </#if>
     private ${field.javaType} ${field.nameHump};
 

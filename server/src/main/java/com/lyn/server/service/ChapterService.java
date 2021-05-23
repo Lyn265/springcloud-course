@@ -5,7 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.lyn.server.domain.Chapter;
 import com.lyn.server.domain.ChapterExample;
 import com.lyn.server.dto.ChapterDto;
-import com.lyn.server.dto.PageDto;
+import com.lyn.server.dto.ChapterPageDto;
 import com.lyn.server.mapper.ChapterMapper;
 import com.lyn.server.util.CopyUtil;
 import com.lyn.server.util.UuidUtil;
@@ -20,12 +20,16 @@ public class ChapterService {
     @Resource
     ChapterMapper chapterMapper;
 
-    public void list(PageDto pageDto) {
-        PageHelper.startPage(pageDto.getPage(),pageDto.getSize());
+    public void list(ChapterPageDto chapterPageDto) {
+        PageHelper.startPage(chapterPageDto.getPage(),chapterPageDto.getSize());
         ChapterExample example = new ChapterExample();
+        ChapterExample.Criteria criteria = example.createCriteria();
+        if(!StringUtils.isEmpty(chapterPageDto.getCourseId())){
+            criteria.andCourseIdEqualTo(chapterPageDto.getCourseId());
+        }
         List<Chapter> chapters = chapterMapper.selectByExample(example);
         PageInfo<Chapter> pageInfo = new PageInfo<>(chapters);
-        pageDto.setTotal(pageInfo.getTotal());
+        chapterPageDto.setTotal(pageInfo.getTotal());
         List<ChapterDto> chapterDtoList = CopyUtil.copyList(chapters,ChapterDto.class);
 //        for (int i = 0; i <chapters.size(); i++) {
 //            ChapterDto chapterDto = new ChapterDto();
@@ -33,7 +37,7 @@ public class ChapterService {
 //            BeanUtils.copyProperties(chapter,chapterDto);
 //            chapterDtoList.add(chapterDto);
 //        }
-        pageDto.setList(chapterDtoList);
+        chapterPageDto.setList(chapterDtoList);
     }
 
     public void save(ChapterDto chapterDto) {

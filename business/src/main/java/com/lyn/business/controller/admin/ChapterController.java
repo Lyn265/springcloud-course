@@ -1,6 +1,7 @@
 package com.lyn.business.controller.admin;
 
 import com.lyn.server.dto.ChapterDto;
+import com.lyn.server.dto.ChapterPageDto;
 import com.lyn.server.dto.PageDto;
 import com.lyn.server.dto.ResponseDto;
 import com.lyn.server.service.ChapterService;
@@ -8,7 +9,6 @@ import com.lyn.server.util.ValidatorUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 @RestController
 @RequestMapping("/admin/chapter")
@@ -19,9 +19,10 @@ public class ChapterController {
     ChapterService chapterService;
 
     @PostMapping("/list")
-    public PageDto list(@RequestBody PageDto pageDto){
-        chapterService.list(pageDto);
-        return  pageDto;
+    public PageDto list(@RequestBody ChapterPageDto chapterPageDto){
+        ValidatorUtil.require(chapterPageDto.getCourseId(),"课程ID");
+        chapterService.list(chapterPageDto);
+        return  chapterPageDto;
     }
 
     @PostMapping("/save")

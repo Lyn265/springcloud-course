@@ -403,6 +403,10 @@
 
             <ul class="submenu">
               <li class="active" id="business-chapter-sidebar">
+                <router-link to="/business/course">
+                  <i class="menu-icon fa fa-caret-right"></i>
+                  课程管理
+                </router-link>
                 <router-link to="/business/chapter">
                   <i class="menu-icon fa fa-caret-right"></i>
                   大章管理

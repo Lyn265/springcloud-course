@@ -55,7 +55,7 @@
     data: function () {
       return {
         total: 0, // 总行数
-        size: 10, // 每页条数
+        size: 5, // 每页条数
         page: 0, // 当前页码
         pageTotal: 0, // 总页数
         pages: [], // 显示的页码数组
