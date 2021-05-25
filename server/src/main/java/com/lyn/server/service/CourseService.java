@@ -11,6 +11,7 @@ import com.lyn.server.mapper.my.MyCourseMapper;
 import com.lyn.server.util.CopyUtil;
 import com.lyn.server.util.UuidUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
@@ -24,6 +25,8 @@ public class CourseService {
 
     @Resource
     MyCourseMapper myCourseMapper;
+    @Resource
+    CourseCategoryService courseCategoryService;
 
     public void list(PageDto pageDto) {
         PageHelper.startPage(pageDto.getPage(),pageDto.getSize());
@@ -41,7 +44,7 @@ public class CourseService {
 //        }
         pageDto.setList(courseDtoList);
     }
-
+    @Transactional
     public void save(CourseDto courseDto) {
         Course course = CopyUtil.copy(courseDto,Course.class);
         if(StringUtils.isEmpty(courseDto.getId())){
@@ -49,6 +52,7 @@ public class CourseService {
         }else{
             update(course);
         }
+        courseCategoryService.saveBatch(course.getId(),courseDto.getCategorys());
     }
     private void insert(Course course) {
         course.setId(UuidUtil.getShortUuid());

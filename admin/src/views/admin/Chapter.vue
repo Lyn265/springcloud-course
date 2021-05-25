@@ -262,6 +262,7 @@
           }
         ).then(resp =>{
           Loading.hide();
+          console.log(resp.data);
           this.chapters = resp.data.list;
           _this.$refs.pagination.render(page,resp.data.total);
 

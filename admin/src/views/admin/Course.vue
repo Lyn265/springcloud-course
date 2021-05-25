@@ -65,192 +65,6 @@
         </div>
       </div>
     </div>
-<!--      <table id="simple-table" class="table  table-bordered table-hover">-->
-<!--        <thead>-->
-<!--          <tr>-->
-<!--            <th></th>-->
-<!--            <th>名称</th>-->
-<!--            <th>概述</th>-->
-<!--            <th>时长</th>-->
-<!--            <th>价格（元）</th>-->
-<!--            <th>封面</th>-->
-<!--            <th>级别</th>-->
-<!--            <th>收费</th>-->
-<!--            <th>状态</th>-->
-<!--            <th>报名数</th>-->
-<!--            <th>顺序</th>-->
-<!--            <th>讲师</th>-->
-<!--            <th>操作</th>-->
-<!--          </tr>-->
-<!--        </thead>-->
-<!--        <tbody>-->
-<!--        <tr v-for="(course,index) in courses" :key="index">-->
-<!--              <td>{{course.id}}</td>-->
-<!--              <td>{{course.name}}</td>-->
-<!--              <td>{{course.summary}}</td>-->
-<!--              <td>{{course.time}}</td>-->
-<!--              <td>{{course.price}}</td>-->
-<!--              <td>{{course.image}}</td>-->
-<!--              <td>{{COURSE_LEVEL | optionKV(course.level)}}</td>-->
-<!--              <td>{{COURSE_CHARGE | optionKV(course.charge)}}</td>-->
-<!--              <td>{{COURSE_STATUS | optionKV(course.status)}}</td>-->
-<!--              <td>{{course.enroll}}</td>-->
-<!--              <td>{{course.sort}}</td>-->
-<!--              <td>{{course.teacherId}}</td>-->
-<!--          <td>-->
-<!--            <div class="hidden-sm hidden-xs btn-group">-->
-
-<!--              <button class="btn btn-xs btn-info" @click="showEdit(course)">-->
-<!--                <i class="ace-icon fa fa-pencil bigger-120"></i>-->
-<!--              </button>-->
-
-<!--              <button class="btn btn-xs btn-danger" @click="remove(course.id)">-->
-<!--                <i class="ace-icon fa fa-trash-o bigger-120"></i>-->
-<!--              </button>-->
-<!--            </div>-->
-<!--&lt;!&ndash;            <div class="hidden-md hidden-lg">&ndash;&gt;-->
-<!--&lt;!&ndash;              <div class="inline pos-rel">&ndash;&gt;-->
-<!--&lt;!&ndash;                <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">&ndash;&gt;-->
-<!--&lt;!&ndash;                  <i class="ace-icon fa fa-cog icon-only bigger-110"></i>&ndash;&gt;-->
-<!--&lt;!&ndash;                </button>&ndash;&gt;-->
-
-<!--&lt;!&ndash;                <ul&ndash;&gt;-->
-<!--&lt;!&ndash;                  class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">&ndash;&gt;-->
-<!--&lt;!&ndash;                  <li>&ndash;&gt;-->
-<!--&lt;!&ndash;                    <a href="#" class="tooltip-info" data-rel="tooltip" title="View">&ndash;&gt;-->
-<!--&lt;!&ndash;																			<span class="blue">&ndash;&gt;-->
-<!--&lt;!&ndash;																				<i class="ace-icon fa fa-search-plus bigger-120"></i>&ndash;&gt;-->
-<!--&lt;!&ndash;																			</span>&ndash;&gt;-->
-<!--&lt;!&ndash;                    </a>&ndash;&gt;-->
-<!--&lt;!&ndash;                  </li>&ndash;&gt;-->
-
-<!--&lt;!&ndash;                  <li>&ndash;&gt;-->
-<!--&lt;!&ndash;                    <a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">&ndash;&gt;-->
-<!--&lt;!&ndash;																			<span class="green">&ndash;&gt;-->
-<!--&lt;!&ndash;																				<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>&ndash;&gt;-->
-<!--&lt;!&ndash;																			</span>&ndash;&gt;-->
-<!--&lt;!&ndash;                    </a>&ndash;&gt;-->
-<!--&lt;!&ndash;                  </li>&ndash;&gt;-->
-
-<!--&lt;!&ndash;                  <li>&ndash;&gt;-->
-<!--&lt;!&ndash;                    <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">&ndash;&gt;-->
-<!--&lt;!&ndash;																			<span class="red">&ndash;&gt;-->
-<!--&lt;!&ndash;																				<i class="ace-icon fa fa-trash-o bigger-120"></i>&ndash;&gt;-->
-<!--&lt;!&ndash;																			</span>&ndash;&gt;-->
-<!--&lt;!&ndash;                    </a>&ndash;&gt;-->
-<!--&lt;!&ndash;                  </li>&ndash;&gt;-->
-<!--&lt;!&ndash;                </ul>&ndash;&gt;-->
-<!--&lt;!&ndash;              </div>&ndash;&gt;-->
-<!--&lt;!&ndash;            </div>&ndash;&gt;-->
-<!--          </td>-->
-<!--        </tr>-->
-<!--        <tr class="detail-row">-->
-<!--          <td colspan="8">-->
-<!--            <div class="table-detail">-->
-<!--              <div class="row">-->
-<!--                <div class="col-xs-12 col-sm-2">-->
-<!--                  <div class="text-center">-->
-<!--                    <img height="150" class="thumbnail inline no-margin-bottom" alt="Domain Owner's Avatar" src="assets/images/avatars/profile-pic.jpg" />-->
-<!--                    <br />-->
-<!--                    <div class="width-80 label label-info label-xlg arrowed-in arrowed-in-right">-->
-<!--                      <div class="inline position-relative">-->
-<!--                        <a class="user-title-label" href="#">-->
-<!--                          <i class="ace-icon fa fa-circle light-green"></i>-->
-<!--                          &nbsp;-->
-<!--                          <span class="white">Alex M. Doe</span>-->
-<!--                        </a>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
-
-<!--                <div class="col-xs-12 col-sm-7">-->
-<!--                  <div class="space visible-xs"></div>-->
-
-<!--                  <div class="profile-user-info profile-user-info-striped">-->
-<!--                    <div class="profile-info-row">-->
-<!--                      <div class="profile-info-name"> Username </div>-->
-
-<!--                      <div class="profile-info-value">-->
-<!--                        <span>alexdoe</span>-->
-<!--                      </div>-->
-<!--                    </div>-->
-
-<!--                    <div class="profile-info-row">-->
-<!--                      <div class="profile-info-name"> Location </div>-->
-
-<!--                      <div class="profile-info-value">-->
-<!--                        <i class="fa fa-map-marker light-orange bigger-110"></i>-->
-<!--                        <span>Netherlands, Amsterdam</span>-->
-<!--                      </div>-->
-<!--                    </div>-->
-
-<!--                    <div class="profile-info-row">-->
-<!--                      <div class="profile-info-name"> Age </div>-->
-
-<!--                      <div class="profile-info-value">-->
-<!--                        <span>38</span>-->
-<!--                      </div>-->
-<!--                    </div>-->
-
-<!--                    <div class="profile-info-row">-->
-<!--                      <div class="profile-info-name"> Joined </div>-->
-
-<!--                      <div class="profile-info-value">-->
-<!--                        <span>2010/06/20</span>-->
-<!--                      </div>-->
-<!--                    </div>-->
-
-<!--                    <div class="profile-info-row">-->
-<!--                      <div class="profile-info-name"> Last Online </div>-->
-
-<!--                      <div class="profile-info-value">-->
-<!--                        <span>3 hours ago</span>-->
-<!--                      </div>-->
-<!--                    </div>-->
-
-<!--                    <div class="profile-info-row">-->
-<!--                      <div class="profile-info-name"> About Me </div>-->
-
-<!--                      <div class="profile-info-value">-->
-<!--                        <span>Bio</span>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
-
-<!--                <div class="col-xs-12 col-sm-3">-->
-<!--                  <div class="space visible-xs"></div>-->
-<!--                  <h4 class="header blue lighter less-margin">Send a message to Alex</h4>-->
-
-<!--                  <div class="space-6"></div>-->
-
-<!--                  <form>-->
-<!--                    <fieldset>-->
-<!--                      <textarea class="width-100" resize="none" placeholder="Type something…"></textarea>-->
-<!--                    </fieldset>-->
-
-<!--                    <div class="hr hr-dotted"></div>-->
-
-<!--                    <div class="clearfix">-->
-<!--                      <label class="pull-left">-->
-<!--                        <input type="checkbox" class="ace" />-->
-<!--                        <span class="lbl"> Email me a copy</span>-->
-<!--                      </label>-->
-
-<!--                      <button class="pull-right btn btn-sm btn-primary btn-white btn-round" type="button">-->
-<!--                        Submit-->
-<!--                        <i class="ace-icon fa fa-arrow-right icon-on-right bigger-110"></i>-->
-<!--                      </button>-->
-<!--                    </div>-->
-<!--                  </form>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </td>-->
-<!--        </tr>-->
-<!--        </tbody>-->
-<!--      </table>-->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -260,6 +74,12 @@
           </div>
           <div class="modal-body">
             <form class="form-horizontal">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">分类</label>
+                <div class="col-sm-10">
+                  <ul id="tree" class="ztree"></ul>
+                </div>
+              </div>
                 <div class="form-group">
                   <label class="col-sm-2 control-label">名称</label>
                   <div class="col-sm-10">
@@ -349,6 +169,7 @@
   import {toast} from "../../utils/toast";
   import {Confirm} from "../../utils/confirm";
   import {Validator} from "../../utils/validator";
+  import {Tool} from "../../utils/tool";
 
   export default {
     name: "Course",
@@ -362,10 +183,14 @@
       COURSE_LEVEL,
       COURSE_CHARGE,
       COURSE_STATUS,
+      categorys:[],
+      tree:{},
+
       }
     },
     mounted() {
       let _this = this;
+      _this.allCatogery();
       _this.list(1);
 
     },
@@ -392,11 +217,14 @@
       },
       showAdd(){
         let _this = this;
+        _this.tree.checkAllNodes(false);
+        _this.tree.expandAll(false);
         _this.course = {};
         $('#myModal').modal('show');
       },
       showEdit(course){
         let _this = this;
+        _this.listCategory(course.id);
         _this.course = Object.assign({},course);
         $('#myModal').modal('show');
       },
@@ -411,10 +239,17 @@
         ) {
           return;
         }
-
+       let categorys = _this.tree.getCheckedNodes();
+        if(Tool.isEmpty(categorys)){
+          toast.warning("请选择分类");
+          return;
+        }
+        console.log(categorys);
+        //把选中的节点放到course里
+        _this.course.categorys = categorys;
         Loading.show();
         _this.$api.post("/business/admin/course/save",
-          _this.course,
+          _this.course
         ).then(resp =>{
           Loading.hide();
           let response = resp.data;
@@ -444,6 +279,50 @@
           });
         })
       },
+      allCatogery(){
+        let _this = this;
+        Loading.show();
+        _this.$api.post("/business/admin/category/all",
+        ).then(resp =>{
+          Loading.hide();
+          _this.categorys = resp.data.content;
+          _this.initTree();
+        })
+      },
+      listCategory(courseId){
+        let _this = this;
+        Loading.show();
+        _this.$api.get("/business/admin/course/list-category/"+courseId,
+        ).then(resp =>{
+          Loading.hide();
+          let listCategory = resp.data.content;
+          console.log(listCategory);
+          _this.tree.checkAllNodes(false);
+          for (let i = 0; i <listCategory.length ; i++) {
+              let category = listCategory[i];
+              let node = _this.tree.getNodeByParam('id',category.categoryId);
+              _this.tree.checkNode(node,true);
+          }
+        })
+      },
+      initTree(){
+        let _this = this;
+        let setting={
+          check:{
+            enable:true,
+          },
+          data:{
+            simpleData:{
+              enable: true,
+              idKey: "id",
+              pIdKey: "parent",
+              rootPId: '00000000'
+            }
+          }
+        };
+        let zNodes =_this.categorys;
+        _this.tree= $.fn.zTree.init($("#tree"),setting,zNodes);
+      }
 
     }
   }
