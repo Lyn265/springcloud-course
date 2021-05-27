@@ -7,4 +7,34 @@
     update course c set time = (select sum(time) from section where course_id=#{courseId})
     where c.id = #{courseId}
 </update>
+<!--    更新排序-->
+    <update id="updateSort">
+        update course set sort=#{sortDto.newSort} where id = #{sortDto.id};
+    </update>
+<!--    新排序变大，重置其它排序-->
+    <update id="moveSortForward">
+    <![CDATA[
+    update course
+     set `sort`=(`sort` - 1)
+        where
+            #{sortDto.newSort} >= `sort`
+        and
+        `sort` >= #{sortDto.oldSort}
+        and
+            id != #{sortDto.id}
+    ]]>
+    </update>
+<!--    新排序变小，重置其它排序-->
+    <update id="moveSortBackward">
+    <![CDATA[
+     update course
+        set `sort`=(`sort` + 1)
+        where
+        `sort` >=  #{sortDto.newSort}
+        and
+        `sort` <= #{sortDto.oldSort}
+        and id != #{sortDto.id}
+    ]]>
+    </update>
+
 </mapper>

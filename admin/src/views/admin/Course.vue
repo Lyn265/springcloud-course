@@ -54,8 +54,14 @@
               <button class="btn btn-white btn-xs btn-info btn-round " @click="toChapter(course)">
                 大章
               </button>&nbsp;
+              <button class="btn btn-white btn-xs btn-info btn-round " @click="toEditContent(course)">
+                内容
+              </button>&nbsp;
               <button class="btn btn-white btn-xs btn-info btn-round" @click="showEdit(course)">
                 编辑
+              </button>&nbsp;
+              <button class="btn btn-white btn-xs btn-info btn-round " @click="showSortModal(course)">
+                排序
               </button>&nbsp;
               <button class="btn btn-white btn-xs btn-danger btn-round" @click="remove(course.id)">
                 删除
@@ -65,12 +71,12 @@
         </div>
       </div>
     </div>
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal fade" id="courseModal" tabindex="-1" role="dialog" aria-labelledby="courseModalLabel">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">课程</h4>
+            <h4 class="modal-title" id="courseModalLabel">课程</h4>
           </div>
           <div class="modal-body">
             <form class="form-horizontal">
@@ -141,22 +147,81 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="col-sm-2 control-label">顺序</label>
-                  <div class="col-sm-10">
-                    <input v-model="course.sort" type="text" class="form-control" placeholder="顺序">
-                  </div>
-                </div>
-                <div class="form-group">
                   <label class="col-sm-2 control-label">讲师</label>
                   <div class="col-sm-10">
                     <input v-model="course.teacherId" type="text" class="form-control" placeholder="讲师">
                   </div>
                 </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">顺序</label>
+                <div class="col-sm-10">
+                  <input v-model="course.sort" type="text" class="form-control" placeholder="顺序" disabled>
+                </div>
+              </div>
             </form>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
             <button type="button" class="btn btn-primary" @click="save()">保存</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="sortModal" tabindex="-1" role="dialog" aria-labelledby="courseModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="sortModalLabel">课程排序</h4>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal">
+              <div class="form-group">
+                <label class="col-lg-3 control-label">当前顺序</label>
+                <div class="col-lg-9">
+                  <input v-model="sort.oldSort" type="text" class="form-control" disabled name="oldSort">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-lg-3 control-label">新顺序</label>
+                <div class="col-lg-9">
+                  <input v-model="sort.newSort" type="text" class="form-control" placeholder="新顺序" name="newSort">
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-primary" @click="updateSort()">更新排序</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="course-content-modal" tabindex="-1" role="dialog" aria-labelledby="courseModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">内容编辑</h4>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal">
+              <div class="form-group">
+                <div class="col-lg-12">
+                  <div>{{saveContentLabel}}</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-lg-12">
+                  文本编辑
+                  <div id="content"></div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-primary" @click="saveContent()">保存</button>
           </div>
         </div>
       </div>
@@ -180,12 +245,17 @@
       return {
         course:{},
         courses:[],
-      COURSE_LEVEL,
-      COURSE_CHARGE,
-      COURSE_STATUS,
-      categorys:[],
-      tree:{},
-
+        COURSE_LEVEL,
+        COURSE_CHARGE,
+        COURSE_STATUS,
+        categorys:[],
+        tree:{},
+        saveContentLabel:"",
+        sort:{
+          id:'',
+          oldSort:0,
+          newSort:0,
+        }
       }
     },
     mounted() {
@@ -210,6 +280,42 @@
 
         })
       },
+      toEditContent(course){
+        let _this = this;
+        let id = course.id;
+        _this.course = course;
+        //初始化富文本编辑框
+        $("#content").summernote({
+          focus:true,
+          height:300
+        });
+        //初始化文本内容
+          $("#content").summernote('node','');
+          _this.saveContentLabel = '';
+          Loading.show();
+        //获取当前课程id的富文本内容
+        _this.$api.get("/business/admin/course/find-content/"+id).then(response =>{
+          Loading.hide();
+          let resp = response.data;
+          if(resp.success){
+            $('#course-content-modal').modal({backdrop:'static',keyboard:false});
+            if(resp.content){
+              $("#content").summernote('node',resp.content);
+              //每5分钟执行一次保存
+             let saveContentInterval =  setInterval(() =>{
+                _this.saveContent();
+              },5000);
+              $('#course-content-modal').on('hidden.bs.modal',(e) =>{
+                clearInterval(saveContentInterval);
+              })
+            }
+          }else{
+            toast.warning(resp.msg);
+          }
+
+        });
+
+      },
       toChapter(course){
         let _this = this;
         SessionStorage.set(SESSION_KEY_COURSE,course);
@@ -220,13 +326,64 @@
         _this.tree.checkAllNodes(false);
         _this.tree.expandAll(false);
         _this.course = {};
-        $('#myModal').modal('show');
+        _this.course.sort =  _this.$refs.pagination.total+1;
+        $('#courseModal').modal('show');
+      },
+      showSortModal(course){
+        let _this = this;
+        _this.sort = {
+          id:course.id,
+          oldSort: course.sort,
+          newSort: course.sort
+        };
+        $('#sortModal').modal('show');
       },
       showEdit(course){
         let _this = this;
         _this.listCategory(course.id);
         _this.course = Object.assign({},course);
-        $('#myModal').modal('show');
+        $('#courseModal').modal('show');
+      },
+      updateSort(){
+        let _this = this;
+        if(_this.sort.newSort === _this.sort.oldSort){
+          toast.warning("排序没有变化。");
+          return;
+        }
+        Loading.show();
+        _this.$api.post("/business/admin/course/sort",
+          _this.sort
+        ).then(response =>{
+          Loading.hide();
+          let resp = response.data;
+          if(resp.success){
+            $('#sortModal').modal('hide');
+            toast.success("更新排序成功");
+            this.list(1);
+          }else{
+            toast.error("更新排序失败");
+          }
+        })
+
+      },
+      saveContent(){
+        let _this = this;
+        let content = $("#content").summernote("code");
+        let id = _this.course.id;
+        Loading.show();
+        _this.$api.post("/business/admin/course/save-content",{
+          id,
+          content,
+        }).then(response =>{
+          Loading.hide();
+          let resp = response.data;
+          if(resp.success){
+            // toast.success("内容保存成功.");
+            _this.saveContentLabel = "最后保存时间: " +Tool.dateFormat('hh:mm:ss');
+          }else{
+            toast.warning(resp.msg);
+          }
+        })
       },
       save(){
         let _this = this;
@@ -244,7 +401,6 @@
           toast.warning("请选择分类");
           return;
         }
-        console.log(categorys);
         //把选中的节点放到course里
         _this.course.categorys = categorys;
         Loading.show();
@@ -254,7 +410,7 @@
           Loading.hide();
           let response = resp.data;
           if(response.success){
-            $('#myModal').modal('hide');
+            $('#courseModal').modal('hide');
             _this.list(1);
             toast.success("保存成功");
           }else {

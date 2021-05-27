@@ -1,10 +1,7 @@
 package com.lyn.business.controller.admin;
 
 import com.lyn.server.domain.CourseCategory;
-import com.lyn.server.dto.CourseCategoryDto;
-import com.lyn.server.dto.CourseDto;
-import com.lyn.server.dto.PageDto;
-import com.lyn.server.dto.ResponseDto;
+import com.lyn.server.dto.*;
 import com.lyn.server.service.CourseCategoryService;
 import com.lyn.server.service.CourseService;
 import com.lyn.server.util.CopyUtil;
@@ -48,13 +45,35 @@ public class CourseController {
         courseService.delete(id);
         return responseDto;
     }
-    //查找课程下所有分类t
+    //查找课程下所有分类
     @GetMapping("/list-category/{courseId}")
     public ResponseDto getCategoryList(@PathVariable("courseId") String courseId){
         ResponseDto responseDto = new ResponseDto();
         List<CourseCategory> categoryList = courseCategoryService.getCategoryList(courseId);
         List<CourseCategoryDto> courseCategorys = CopyUtil.copyList(categoryList, CourseCategoryDto.class);
         responseDto.setContent(courseCategorys);
+        return responseDto;
+    }
+    //查找课程
+    @GetMapping("/find-content/{id}")
+    public ResponseDto findContent(@PathVariable("id") String id){
+        ResponseDto responseDto = new ResponseDto();
+        CourseContentDto courseContentDto = courseService.findContent(id);
+        responseDto.setContent(courseContentDto);
+        return responseDto;
+    }
+    //保存课程
+    @PostMapping("/save-content")
+    public ResponseDto saveContent(@RequestBody CourseContentDto courseContentDto){
+        ResponseDto responseDto = new ResponseDto();
+         courseService.saveContent(courseContentDto);
+        return responseDto;
+    }
+    //更新排序
+    @PostMapping("/sort")
+    public ResponseDto sort(@RequestBody SortDto sortDto){
+        ResponseDto responseDto = new ResponseDto();
+        courseService.sort(sortDto);
         return responseDto;
     }
 }

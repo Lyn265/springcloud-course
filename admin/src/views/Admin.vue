@@ -321,8 +321,7 @@
 
     <div class="main-container ace-save-state" id="main-container">
 
-      <div id="sidebar" class="sidebar                  responsive                    ace-save-state">
-
+      <div id="sidebar" class="sidebar responsive ace-save-state">
         <div class="sidebar-shortcuts" id="sidebar-shortcuts">
           <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
             <button class="btn btn-success">
@@ -359,71 +358,64 @@
               <i class="menu-icon fa fa-tachometer"></i>
               <span class="menu-text"> 欢迎 </span>
             </router-link>
-
             <b class="arrow"></b>
           </li>
           <li class="" id="admin-sidebar">
           <a href="#" class="dropdown-toggle">
             <i class="menu-icon fa fa-list"></i>
             <span class="menu-text"> 系统管理 </span>
-
             <b class="arrow fa fa-angle-down"></b>
           </a>
-
           <b class="arrow"></b>
-
           <ul class="submenu">
             <li class="">
               <a href="tables.html">
                 <i class="menu-icon fa fa-caret-right"></i>
                 用户管理
               </a>
-
               <b class="arrow"></b>
             </li>
-
-            <li class="">
-              <a href="jqgrid.html">
-                <i class="menu-icon fa fa-caret-right"></i>
-                权限管理
-              </a>
-
-              <b class="arrow"></b>
-            </li>
-          </ul>
-        </li>
+              <li class="">
+                <a href="jqgrid.html">
+                  <i class="menu-icon fa fa-caret-right"></i>
+                  权限管理
+                </a>
+                <b class="arrow"></b>
+              </li>
+            </ul>
+          </li>
           <li class="active open">
             <a href="#" class="dropdown-toggle">
               <i class="menu-icon fa fa-list"></i>
               <span class="menu-text"> 业务管理 </span>
               <b class="arrow fa fa-angle-down"></b>
             </a>
-
             <b class="arrow"></b>
-
             <ul class="submenu">
-              <li class="active" id="business-chapter-sidebar">
+              <li class="" id="business-category-sidebar">
                 <router-link to="/business/category">
                   <i class="menu-icon fa fa-caret-right"></i>
                   目录管理
                 </router-link>
+                <b class="arrow"></b>
+              </li>
+              <li class="" id="business-course-sidebar">
                 <router-link to="/business/course">
                   <i class="menu-icon fa fa-caret-right"></i>
                   课程管理
                 </router-link>
-                <router-link to="/business/chapter">
-                  <i class="menu-icon fa fa-caret-right"></i>
-                  大章管理
-                </router-link>
-                <router-link to="/business/section">
-                  <i class="menu-icon fa fa-caret-right"></i>
-                  小节管理
-                </router-link>
+<!--                <router-link to="/business/chapter">-->
+<!--                  <i class="menu-icon fa fa-caret-right"></i>-->
+<!--                  大章管理-->
+<!--                </router-link>-->
+<!--                <router-link to="/business/section">-->
+<!--                  <i class="menu-icon fa fa-caret-right"></i>-->
+<!--                  小节管理-->
+<!--                </router-link>-->
                 <b class="arrow"></b>
               </li>
             </ul>
           </li>
-
         </ul><!-- /.nav-list -->
 
         <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
@@ -485,7 +477,7 @@
       let _this = this;
       $('body').removeClass( 'login-layout light-login');
       $('body').attr( 'class','no-skin');
-      _this.activeSidebar(_this.$route.name.replace('/','-')+'-sidebar');
+      // _this.activeSidebar('business-course-sidebar');
     },
     watch:{
       $route:{
