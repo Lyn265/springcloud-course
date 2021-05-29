@@ -29,13 +29,20 @@
               {{COURSE_STATUS | optionKV(course.status)}}
               </span>
             </div>
-
             <h3 class="search-title">
               <a href="#" class="blue">{{course.name}}</a>
             </h3>
+            <div class="profile-activity clearfix" v-for="teacher in teachers.filter(t =>{return t.id === course.teacherId})">
+              <div>
+                <img v-show="!teacher.image" class="pull-left" src="/static/image/讲师头像/头像3.jpg">
+                <img v-show="teacher.image" class="pull-left" v-bind:src="teacher.image">
+                <div>{{teacher.position}}</div>
+                <div>{{teacher.name}}</div>
+              </div>
+            </div>
             <p>
               <span class="blue bolder bigger-150">
-                {{course.price}}&nbsp;<i class="fa fa-rmb"></i>
+                <i class="fa fa-rmb"></i> {{course.price}}&nbsp;
               </span>
             </p>
             <p>{{course.summary}}</p>
@@ -47,7 +54,7 @@
                 排序:{{course.sort}}
               </span>&nbsp;
               <span class="badge badge-info">
-                时长:{{course.time | formatSecond}}
+                {{course.time | formatSecond}}
               </span>
             </p>
             <p>
@@ -146,12 +153,14 @@
                     <input v-model="course.enroll" type="text" class="form-control" placeholder="报名数">
                   </div>
                 </div>
-                <div class="form-group">
-                  <label class="col-sm-2 control-label">讲师</label>
-                  <div class="col-sm-10">
-                    <input v-model="course.teacherId" type="text" class="form-control" placeholder="讲师">
-                  </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">讲师</label>
+                <div class="col-sm-10">
+                  <select v-model="course.teacherId" class="form-control">
+                    <option v-for="t in teachers" v-bind:value="t.id">{{t.name}}</option>
+                  </select>
                 </div>
+              </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label">顺序</label>
                 <div class="col-sm-10">
@@ -255,12 +264,14 @@
           id:'',
           oldSort:0,
           newSort:0,
-        }
+        },
+        teachers:[],
       }
     },
     mounted() {
       let _this = this;
       _this.allCatogery();
+      _this.allTeacher();
       _this.list(1);
 
     },
@@ -461,6 +472,15 @@
           }
         })
       },
+      allTeacher(){
+        let _this = this;
+        Loading.show();
+        _this.$api.get("/business/admin/teacher/all",
+        ).then(resp =>{
+          Loading.hide();
+          _this.teachers = resp.data.content;
+        })
+      },
       initTree(){
         let _this = this;
         let setting={
@@ -485,5 +505,12 @@
 </script>
 
 <style scoped>
-
+  .caption h3 {
+    font-size: 20px;
+  }
+@media (max-width: 1199px) {
+  .caption h3 {
+    font-size: 16px;
+  }
+}
 </style>
