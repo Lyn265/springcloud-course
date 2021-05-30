@@ -81,7 +81,16 @@
                 <div class="form-group">
                   <label class="col-sm-2 control-label">头像</label>
                   <div class="col-sm-10">
-                    <input ref="fileInput" type="file" v-on:change="uploadImage()">
+                  <File v-bind:text="'上传头像'"
+                        v-bind:after-upload="afterUpload"
+                        v-bind:id="'image-upload'"
+                        v-bind:suffixs="['jpg','jpeg','png']"
+                  ></File>
+                          <div v-show="teacher.image" class="row">
+                            <div class="col-md-4">
+                              <img v-bind:src="teacher.image" alt="" class="img-responsive">
+                            </div>
+                          </div>
                   </div>
                 </div>
                 <div class="form-group">
@@ -116,6 +125,7 @@
 
 <script>
   import Pagination from "../../components/Pagination";
+  import File from "../../components/File";
   import {toast} from "../../utils/toast";
   import {Confirm} from "../../utils/confirm";
   import {Validator} from "../../utils/validator";
@@ -123,7 +133,7 @@
   export default {
     name: "Teacher",
     components:{
-      Pagination,
+      Pagination,File
     },
     data(){
       return {
@@ -209,24 +219,11 @@
           });
         })
       },
-      uploadImage(){
-        let _this = this;
-        let file = _this.$refs.fileInput.files[0];
-        let data = new FormData();
-        data.append("file",file);
-        Loading.show();
-        _this.$api.post("/file/admin/upload",data,{
-          headers:{
-            'Content-Type': 'multipart/form-data'
-          }
-        }).then(response =>{
-          Loading.hide();
-          let resp = response.data;
-          console.log(resp.content);
-        })
-
+      afterUpload(resp){
+          let _this = this;
+          let img = resp.content;
+          _this.teacher.image = img;
       }
-
     }
   }
 </script>
