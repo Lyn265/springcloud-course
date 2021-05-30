@@ -8,11 +8,10 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 public class ServerGenerator {
-    static String MODULE = "business";
+    static String MODULE = "file";
     static String toServicePath = "server/src/main/java/com/lyn/server/service/";
     static String toDtoPath = "server/src/main/java/com/lyn/server/dto/";
     static String toControllerPath = MODULE+"/src/main/java/com/lyn/"+MODULE+"/controller/admin/";

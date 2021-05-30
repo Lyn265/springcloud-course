@@ -1,9 +1,6 @@
 package com.lyn.generator.enums;
 
-import com.lyn.server.enums.CourseChargeEnum;
-import com.lyn.server.enums.CourseLevelEnum;
-import com.lyn.server.enums.CourseStatusEnum;
-import com.lyn.server.enums.SectionChargeEnum;
+import com.lyn.server.enums.*;
 
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
@@ -24,6 +21,7 @@ public class EnumGenerator {
             toJson(CourseLevelEnum.class, bufferObject, bufferArray);
             toJson(CourseChargeEnum.class, bufferObject, bufferArray);
             toJson(CourseStatusEnum.class, bufferObject, bufferArray);
+            toJson(FileUseEnum.class, bufferObject, bufferArray);
 
             StringBuffer buffer = bufferObject.append("\r\n").append(bufferArray);
             writeJs(buffer);

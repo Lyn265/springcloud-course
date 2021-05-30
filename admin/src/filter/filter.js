@@ -20,6 +20,16 @@ export const optionKV = (obj,key)=>{
   }
 
 };
+export const formatFileSize =(fileSize) =>{
+  fileSize = fileSize || 0 ;
+  let result;
+  if(fileSize > 100 * 1024){
+    result = Math.round((fileSize/1024/1024)*100)/100 + "MB";
+  }else{
+    result =  Math.round((fileSize/1024)*100)/100 + "KB";
+  }
+  return result;
+};
 /**
  * 数组过滤器 例如：[{SECTION_CHARGE | optionKV(section.charge)}]
  * @param object 例如：{CHARGE:{key:"C", value:"收费"},FREE:{key:"F", value:"免费"}}

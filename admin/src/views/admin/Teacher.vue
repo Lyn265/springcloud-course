@@ -85,6 +85,7 @@
                         v-bind:after-upload="afterUpload"
                         v-bind:id="'image-upload'"
                         v-bind:suffixs="['jpg','jpeg','png']"
+                        v-bind:use="FILE_USE.TEACHER.key"
                   ></File>
                           <div v-show="teacher.image" class="row">
                             <div class="col-md-4">
@@ -139,6 +140,7 @@
       return {
         teacher:{},
         teachers:[],
+        FILE_USE
       }
     },
     mounted() {

@@ -31,6 +31,9 @@
         default:() =>[],
         type:Array
       },
+      use:{
+        default:"",
+      },
       afterUpload:{
         default: null,
         type:Function
@@ -58,6 +61,7 @@
         }
         let data = new FormData();
         data.append("file",file);
+        data.append("use",_this.use);
         Loading.show();
         _this.$api.post("/file/admin/upload",data,{
           headers:{
