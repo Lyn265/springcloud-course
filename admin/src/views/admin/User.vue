@@ -15,33 +15,27 @@
       <table id="simple-table" class="table  table-bordered table-hover">
         <thead>
           <tr>
-<#list fieldList as field>
-            <#if field.nameHump!='createdAt' && field.nameHump!='updatedAt'>
-            <th>${field.nameCn}</th>
-          </#if>
-          </#list>
+            <th>id</th>
+            <th>登陆名</th>
+            <th>昵称</th>
+            <th>密码</th>
             <th>操作</th>
           </tr>
         </thead>
         <tbody>
-        <tr v-for="(${domain},index) in ${domain}s" :key="index">
-        <#list fieldList as field>
-            <#if field.nameHump!='createdAt' && field.nameHump!='updatedAt'>
-              <#if field.enums>
-              <td>{{${field.enumsConst} | optionKV(${domain}.${field.nameHump})}}</td>
-              <#else>
-              <td>{{${domain}.${field.nameHump}}}</td>
-              </#if>
-            </#if>
-        </#list>
+        <tr v-for="(user,index) in users" :key="index">
+              <td>{{user.id}}</td>
+              <td>{{user.loginName}}</td>
+              <td>{{user.name}}</td>
+              <td>{{user.password}}</td>
           <td>
             <div class="hidden-sm hidden-xs btn-group">
 
-              <button class="btn btn-xs btn-info" @click="showEdit(${domain})">
+              <button class="btn btn-xs btn-info" @click="showEdit(user)">
                 <i class="ace-icon fa fa-pencil bigger-120"></i>
               </button>
 
-              <button class="btn btn-xs btn-danger" @click="remove(${domain}.id)">
+              <button class="btn btn-xs btn-danger" @click="remove(user.id)">
                 <i class="ace-icon fa fa-trash-o bigger-120"></i>
               </button>
             </div>
@@ -198,27 +192,24 @@
           </div>
           <div class="modal-body">
             <form class="form-horizontal">
-              <#list fieldList as field>
-                <#if field.name!='id' && field.nameHump!='createdAt' && field.nameHump!='updatedAt'>
-                  <#if field.enums>
-                  <div class="form-group">
-                  <label class="col-sm-2 control-label">${field.nameCn}</label>
-                  <div class="col-sm-10">
-                    <select v-model="${domain}.${field.nameHump}" class="form-control">
-                      <option v-for="s in ${field.enumsConst}" v-bind:value="s.key">{{s.value}}</option>
-                    </select>
-                  </div>
-                  </div>
-                  <#else >
                 <div class="form-group">
-                  <label class="col-sm-2 control-label">${field.nameCn}</label>
+                  <label class="col-sm-2 control-label">登陆名</label>
                   <div class="col-sm-10">
-                    <input v-model="${domain}.${field.nameHump}" type="text" class="form-control" placeholder="${field.nameCn}">
+                    <input v-model="user.loginName" type="text" class="form-control" placeholder="登陆名">
                   </div>
                 </div>
-                </#if>
-                </#if>
-              </#list>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">昵称</label>
+                  <div class="col-sm-10">
+                    <input v-model="user.name" type="text" class="form-control" placeholder="昵称">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">密码</label>
+                  <div class="col-sm-10">
+                    <input v-model="user.password" type="text" class="form-control" placeholder="密码">
+                  </div>
+                </div>
             </form>
           </div>
           <div class="modal-footer">
@@ -238,19 +229,14 @@
   import {Validator} from "../../utils/validator";
 
   export default {
-    name: "${Domain}",
+    name: "User",
     components:{
       Pagination,
     },
     data(){
       return {
-        ${domain}:{},
-        ${domain}s:[],
-      <#list fieldList as field>
-      <#if field.enums>
-      ${field.enumsConst},
-      </#if>
-      </#list>
+        user:{},
+        users:[],
       }
     },
     mounted() {
@@ -262,7 +248,7 @@
       list(page){
         let _this = this;
         Loading.show();
-        _this.$api.post("/${module}/admin/${domain}/list",
+        _this.$api.post("/system/admin/user/list",
           {
             page:page,
             size:_this.$refs.pagination.size
@@ -270,42 +256,36 @@
         ).then(response =>{
           Loading.hide();
           let resp = response.data;
-          this.${domain}s = resp.content.list;
+          this.users = resp.content.list;
           _this.$refs.pagination.render(page,resp.content.total);
 
         })
       },
       showAdd(){
         let _this = this;
-        _this.${domain} = {};
+        _this.user = {};
         $('#myModal').modal('show');
       },
-      showEdit(${domain}){
+      showEdit(user){
         let _this = this;
-        _this.${domain} = Object.assign({},${domain});
+        _this.user = Object.assign({},user);
         $('#myModal').modal('show');
       },
       save(){
         let _this = this;
         // 保存校验
         if (1 != 1
-        <#list fieldList as field>
-          <#if field.name!="id" && field.nameHump!="createdAt" && field.nameHump!="updatedAt" && field.nameHump!="sort">
-            <#if !field.nullAble>
-          || !Validator.require(_this.${domain}.${field.nameHump}, "${field.nameCn}")
-            </#if>
-            <#if (field.length > 0)>
-          || !Validator.length(_this.${domain}.${field.nameHump}, "${field.nameCn}", 1, ${field.length?c})
-            </#if>
-          </#if>
-        </#list>
+          || !Validator.require(_this.user.loginName, "登陆名")
+          || !Validator.length(_this.user.loginName, "登陆名", 1, 50)
+          || !Validator.length(_this.user.name, "昵称", 1, 50)
+          || !Validator.require(_this.user.password, "密码")
         ) {
           return;
         }
 
         Loading.show();
-        _this.$api.post("/${module}/admin/${domain}/save",
-          _this.${domain},
+        _this.$api.post("/system/admin/user/save",
+          _this.user,
         ).then(resp =>{
           Loading.hide();
           let response = resp.data;
@@ -322,7 +302,7 @@
         let _this = this;
         Confirm.show('删除后不可恢复，确认删除？',function () {
           Loading.show();
-          _this.$api.delete("/${module}/admin/${domain}/delete/"+id
+          _this.$api.delete("/system/admin/user/delete/"+id
           ).then(resp =>{
             Loading.hide();
             let response = resp.data;

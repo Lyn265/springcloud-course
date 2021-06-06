@@ -83,7 +83,7 @@
                   <div class="col-sm-10">
                   <File v-bind:text="'上传头像'"
                         v-bind:after-upload="afterUpload"
-                        v-bind:id="'image-upload'"
+                        v-bind:input-id="'image-upload'"
                         v-bind:suffixs="['jpg','jpeg','png']"
                         v-bind:use="FILE_USE.TEACHER.key"
                   ></File>
@@ -223,7 +223,7 @@
       },
       afterUpload(resp){
           let _this = this;
-          let img = resp.content;
+          let img = resp.content.path;
           _this.teacher.image = img;
       }
     }

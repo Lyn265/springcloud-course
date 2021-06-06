@@ -61,7 +61,7 @@
               <button class="btn btn-white btn-xs btn-info btn-round " @click="toChapter(course)">
                 大章
               </button>&nbsp;
-              <button class="btn btn-white btn-xs btn-info btn-round " @click="toEditContent(course)">
+              <button class="btn btn-white btn-xs btn-info btn-round " @click="toContent(course)">
                 内容
               </button>&nbsp;
               <button class="btn btn-white btn-xs btn-info btn-round" @click="showEdit(course)">
@@ -93,6 +93,22 @@
                   <ul id="tree" class="ztree"></ul>
                 </div>
               </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">封面</label>
+                <div class="col-sm-10">
+                  <BigFire v-bind:text="'上传封面'"
+                        v-bind:after-upload="afterUpload"
+                        v-bind:input-id="'image-upload'"
+                        v-bind:suffixs="['jpg','jpeg','png']"
+                        v-bind:use="FILE_USE.COURSE.key"
+                  ></BigFire>
+                  <div v-show="course.image" class="row">
+                    <div class="col-md-4">
+                      <img v-bind:src="course.image" alt="" class="img-responsive">
+                    </div>
+                  </div>
+                </div>
+              </div>
                 <div class="form-group">
                   <label class="col-sm-2 control-label">名称</label>
                   <div class="col-sm-10">
@@ -115,12 +131,6 @@
                   <label class="col-sm-2 control-label">价格（元）</label>
                   <div class="col-sm-10">
                     <input v-model="course.price" type="text" class="form-control" placeholder="价格（元）">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-sm-2 control-label">封面</label>
-                  <div class="col-sm-10">
-                    <input v-model="course.image" type="text" class="form-control" placeholder="封面">
                   </div>
                 </div>
                   <div class="form-group">
@@ -206,40 +216,12 @@
         </div>
       </div>
     </div>
-    <div class="modal fade" id="course-content-modal" tabindex="-1" role="dialog" aria-labelledby="courseModalLabel">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">内容编辑</h4>
-          </div>
-          <div class="modal-body">
-            <form class="form-horizontal">
-              <div class="form-group">
-                <div class="col-lg-12">
-                  <div>{{saveContentLabel}}</div>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-lg-12">
-                  文本编辑
-                  <div id="content"></div>
-                </div>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-            <button type="button" class="btn btn-primary" @click="saveContent()">保存</button>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
   import Pagination from "../../components/Pagination";
+  import BigFire from "../../components/BigFile";
   import {toast} from "../../utils/toast";
   import {Confirm} from "../../utils/confirm";
   import {Validator} from "../../utils/validator";
@@ -248,7 +230,7 @@
   export default {
     name: "Course",
     components:{
-      Pagination,
+      Pagination,BigFire
     },
     data(){
       return {
@@ -257,6 +239,7 @@
         COURSE_LEVEL,
         COURSE_CHARGE,
         COURSE_STATUS,
+        FILE_USE,
         categorys:[],
         tree:{},
         saveContentLabel:"",
@@ -266,6 +249,7 @@
           newSort:0,
         },
         teachers:[],
+        files:[]
       }
     },
     mounted() {
@@ -291,46 +275,52 @@
 
         })
       },
-      toEditContent(course){
-        let _this = this;
-        let id = course.id;
-        _this.course = course;
-        //初始化富文本编辑框
-        $("#content").summernote({
-          focus:true,
-          height:300
-        });
-        //初始化文本内容
-          $("#content").summernote('node','');
-          _this.saveContentLabel = '';
-          Loading.show();
-        //获取当前课程id的富文本内容
-        _this.$api.get("/business/admin/course/find-content/"+id).then(response =>{
-          Loading.hide();
-          let resp = response.data;
-          if(resp.success){
-            $('#course-content-modal').modal({backdrop:'static',keyboard:false});
-            if(resp.content){
-              $("#content").summernote('node',resp.content);
-              //每5分钟执行一次保存
-             let saveContentInterval =  setInterval(() =>{
-                _this.saveContent();
-              },5000);
-              $('#course-content-modal').on('hidden.bs.modal',(e) =>{
-                clearInterval(saveContentInterval);
-              })
-            }
-          }else{
-            toast.warning(resp.msg);
-          }
-
-        });
-
-      },
+      // toEditContent(course){
+      //   let _this = this;
+      //   let id = course.id;
+      //   _this.course = course;
+      //   //初始化富文本编辑框
+      //   $("#content").summernote({
+      //     focus:true,
+      //     height:300
+      //   });
+      //   //初始化文本内容
+      //     $("#content").summernote('node','');
+      //     _this.saveContentLabel = '';
+      //   _this.getCourseContentFile(id);
+      //
+      //   Loading.show();
+      //   //获取当前课程id的富文本内容
+      //   _this.$api.get("/business/admin/course/find-content/"+id).then(response =>{
+      //     Loading.hide();
+      //     let resp = response.data;
+      //     if(resp.success){
+      //       $('#course-content-modal').modal({backdrop:'static',keyboard:false});
+      //       if(resp.content){
+      //         $("#content").summernote('node',resp.content);
+      //         //每5分钟执行一次保存
+      //        let saveContentInterval =  setInterval(() =>{
+      //           _this.saveContent();
+      //         },5000);
+      //         $('#course-content-modal').on('hidden.bs.modal',(e) =>{
+      //           clearInterval(saveContentInterval);
+      //         })
+      //       }
+      //     }else{
+      //       toast.warning(resp.msg);
+      //     }
+      //
+      //   });
+      // },
       toChapter(course){
         let _this = this;
         SessionStorage.set(SESSION_KEY_COURSE,course);
         _this.$router.push("/business/chapter");
+      },
+      toContent(course){
+        let _this = this;
+        SessionStorage.set(SESSION_KEY_COURSE,course);
+        _this.$router.push("/business/content");
       },
       showAdd(){
         let _this = this;
@@ -463,7 +453,6 @@
         ).then(resp =>{
           Loading.hide();
           let listCategory = resp.data.content;
-          console.log(listCategory);
           _this.tree.checkAllNodes(false);
           for (let i = 0; i <listCategory.length ; i++) {
               let category = listCategory[i];
@@ -498,7 +487,60 @@
         };
         let zNodes =_this.categorys;
         _this.tree= $.fn.zTree.init($("#tree"),setting,zNodes);
-      }
+      },
+      afterUpload(resp){
+        let _this = this;
+        let img = resp.content.path;
+        _this.course.image = img;
+      },
+      delFile(file){
+        let _this = this;
+        Confirm.show('删除后不可恢复，确认删除？',function () {
+          Loading.show();
+          _this.$api.delete("/business/admin/course-content-file/delete/"+file.id
+          ).then(response =>{
+            Loading.hide();
+            let resp = response.data;
+            if(resp.success){
+              toast.success("删除成功");
+              Tool.removeObj(_this.files,file);
+            }
+          });
+        })
+
+      },
+      getCourseContentFile(courseId){
+        let _this = this;
+        Loading.show();
+        _this.$api.get("/business/admin/course-content-file/list/"+courseId,
+        ).then(response =>{
+          Loading.hide();
+          let resp = response.data;
+          if(resp.success){
+          _this.files = resp.content;
+          }
+        })
+      },
+      /**
+       * 通过文件上传组件获取到上传文件，客户端拿到数据后，在请求一次服务端，保存到course-content-file表里
+       * @param response
+       */
+      afterUploadContentFile(response){
+        let _this = this;
+        let file = response.content;
+        let contentFile = {
+          courseId:_this.course.id,
+          url:file.path,
+          name:file.name,
+          size:file.size
+        };
+        _this.$api.post("/business/admin/course-content-file/save",contentFile).then(response =>{
+          let resp = response.data;
+          if(resp.success){
+            _this.files.push(resp.content);
+          }
+        })
+      },
 
     }
   }

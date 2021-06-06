@@ -19,9 +19,11 @@ public class ${Domain}Controller {
     ${Domain}Service ${domain}Service;
 
     @PostMapping("/list")
-    public PageDto list(@RequestBody PageDto pageDto){
+    public ResponseDto list(@RequestBody PageDto pageDto){
+        ResponseDto responseDto = new ResponseDto();
         ${domain}Service.list(pageDto);
-        return  pageDto;
+        responseDto.setContent(pageDto);
+        return responseDto;
     }
 
     @PostMapping("/save")

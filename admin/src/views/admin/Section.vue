@@ -171,16 +171,16 @@
           </div>
           <div class="modal-body">
             <form class="form-horizontal">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">课程</label>
+                <div class="col-sm-10">
+                  <p class="form-control-static">{{course.name}}</p>
+                </div>
+              </div>
                 <div class="form-group">
                   <label class="col-sm-2 control-label">标题</label>
                   <div class="col-sm-10">
                     <input v-model="section.title" type="text" class="form-control" placeholder="标题">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-sm-2 control-label">课程</label>
-                  <div class="col-sm-10">
-                    <p class="form-control-static">{{course.name}}</p>
                   </div>
                 </div>
                 <div class="form-group">
@@ -189,12 +189,22 @@
                     <p class="form-control-static">{{chapter.name}}</p>
                   </div>
                 </div>
-                <div class="form-group">
-                  <label class="col-sm-2 control-label">视频</label>
-                  <div class="col-sm-10">
-                    <input v-model="section.video" type="text" class="form-control" placeholder="视频">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">视频</label>
+                <div class="col-sm-10">
+                  <BigFile v-bind:text="'上传大视频'"
+                        v-bind:after-upload="afterUpload"
+                        v-bind:input-id="'video-upload'"
+                        v-bind:suffixs="['mp4']"
+                        v-bind:use="FILE_USE.COURSE.key"
+                  ></BigFile>
+                  <div v-show="section.video" class="row">
+                    <div class="col-md-9">
+                      <video v-bind:src="section.video" controls="controls" ref="video"></video>
+                    </div>
                   </div>
                 </div>
+              </div>
                 <div class="form-group">
                   <label class="col-sm-2 control-label">时长</label>
                   <div class="col-sm-10">
@@ -235,6 +245,7 @@
 
 <script>
   import Pagination from "../../components/Pagination";
+  import BigFile from "../../components/BigFile";
   import {toast} from "../../utils/toast";
   import {Confirm} from "../../utils/confirm";
   import {Validator} from "../../utils/validator";
@@ -242,13 +253,14 @@
   export default {
     name: "Section",
     components:{
-      Pagination,
+      Pagination,BigFile
     },
     data(){
       return {
         section:{},
         sections:[],
         SECTION_CHARGE,
+        FILE_USE,
         chapter:{},
         course:{}
       }
@@ -337,11 +349,29 @@
           });
         })
       },
+      afterUpload(resp){
+        let _this = this;
+        let video = resp.content.path;
+        _this.section.video = video;
+        _this.getTime();
+      },
+      getTime(){
+        let _this = this;
+        setTimeout(()=>{
+        let video = _this.$refs.video;
+         _this.section.time = parseInt(video.duration,10);
+        },1000);
+      }
 
     }
   }
 </script>
 
 <style scoped>
+  video{
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+  }
 
 </style>

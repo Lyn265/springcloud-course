@@ -70,7 +70,6 @@
         }).then(response =>{
           Loading.hide();
           let resp = response.data;
-          console.log(resp);
           _this.afterUpload(resp);
           $("#"+_this.inputId+'-input').val("");
         })

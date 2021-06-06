@@ -9,6 +9,8 @@ import Course from "./views/admin/Course";
 import Category from "./views/admin/Category";
 import Teacher from "./views/admin/Teacher";
 import File from "./views/admin/File";
+import Content from "./views/admin/Content";
+import User from "./views/admin/User";
 
 
 Vue.use(Router);
@@ -17,10 +19,10 @@ export default new Router({
     mode:'history',
     base:process.env.BASE_URL,
     routes:[
-        // {
-        //     path:'*',
-        //     redirect:'/login',
-        // },
+        {
+            path:'*',
+            redirect:'/login',
+        },
         {
             path: '/login',
             component:Login
@@ -35,6 +37,12 @@ export default new Router({
                     name:'welcome',
                     component:Welcome
                 },
+                {
+                    path: 'system/user',
+                    name:'system/user',
+                    component:User
+                },
+
                 {
                     path: 'business/category',
                     name:'business/category',
@@ -59,6 +67,11 @@ export default new Router({
                     path: 'business/section',
                     name:'business/section',
                     component:Section
+                },
+                {
+                    path: 'business/content',
+                    name:'business/content',
+                    component:Content
                 },
                 {
                     path: 'file/file',

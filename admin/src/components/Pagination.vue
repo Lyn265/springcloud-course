@@ -21,6 +21,7 @@
             v-on:click="selectPage(page + 1)">
       下一页
     </button>
+    &nbsp;&nbsp;
     <button type="button" class="btn btn-default btn-white btn-round"
             v-bind:disabled="page === pageTotal"
             v-on:click="selectPage(pageTotal)">

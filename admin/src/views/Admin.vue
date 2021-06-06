@@ -360,21 +360,21 @@
             </router-link>
             <b class="arrow"></b>
           </li>
-          <li class="" id="admin-sidebar">
-          <a href="#" class="dropdown-toggle">
-            <i class="menu-icon fa fa-list"></i>
-            <span class="menu-text"> 系统管理 </span>
-            <b class="arrow fa fa-angle-down"></b>
-          </a>
-          <b class="arrow"></b>
-          <ul class="submenu">
-            <li class="">
-              <a href="tables.html">
-                <i class="menu-icon fa fa-caret-right"></i>
-                用户管理
-              </a>
-              <b class="arrow"></b>
-            </li>
+          <li class="">
+            <a href="#" class="dropdown-toggle">
+              <i class="menu-icon fa fa-list"></i>
+              <span class="menu-text"> 系统管理 </span>
+              <b class="arrow fa fa-angle-down"></b>
+            </a>
+            <b class="arrow"></b>
+            <ul class="submenu">
+              <li class="" id="system-user-sidebar">
+                <router-link to="/system/user">
+                  <i class="menu-icon fa fa-caret-right"></i>
+                  用户管理
+                </router-link>
+                <b class="arrow"></b>
+              </li>
               <li class="">
                 <a href="jqgrid.html">
                   <i class="menu-icon fa fa-caret-right"></i>
@@ -384,7 +384,7 @@
               </li>
             </ul>
           </li>
-          <li class="active open">
+          <li class="">
             <a href="#" class="dropdown-toggle">
               <i class="menu-icon fa fa-list"></i>
               <span class="menu-text"> 业务管理 </span>
@@ -411,19 +411,19 @@
                   <i class="menu-icon fa fa-caret-right"></i>
                   课程管理
                 </router-link>
-<!--                <router-link to="/business/chapter">-->
-<!--                  <i class="menu-icon fa fa-caret-right"></i>-->
-<!--                  大章管理-->
-<!--                </router-link>-->
-<!--                <router-link to="/business/section">-->
-<!--                  <i class="menu-icon fa fa-caret-right"></i>-->
-<!--                  小节管理-->
-<!--                </router-link>-->
+                <!--                <router-link to="/business/chapter">-->
+                <!--                  <i class="menu-icon fa fa-caret-right"></i>-->
+                <!--                  大章管理-->
+                <!--                </router-link>-->
+                <!--                <router-link to="/business/section">-->
+                <!--                  <i class="menu-icon fa fa-caret-right"></i>-->
+                <!--                  小节管理-->
+                <!--                </router-link>-->
                 <b class="arrow"></b>
               </li>
             </ul>
           </li>
-          <li class="active open">
+          <li class="">
             <a href="#" class="dropdown-toggle">
               <i class="menu-icon fa fa-list"></i>
               <span class="menu-text"> 文件管理 </span>
@@ -431,7 +431,7 @@
             </a>
             <b class="arrow"></b>
             <ul class="submenu">
-              <li class="" id="file-category-sidebar">
+              <li class="" id="file-file-sidebar">
                 <router-link to="/file/file">
                   <i class="menu-icon fa fa-caret-right"></i>
                   文件管理
@@ -500,7 +500,9 @@
       let _this = this;
       $('body').removeClass( 'login-layout light-login');
       $('body').attr( 'class','no-skin');
-      // _this.activeSidebar('business-course-sidebar');
+      _this.activeSidebar(this.$route.name.replace('/','-')+'-sidebar');
+      $.getScript("/ace/assets/js/ace.min.js");
+
     },
     watch:{
       $route:{
@@ -524,6 +526,7 @@
         let parentLi = $("#"+id).parents("li");
         if(parentLi){
           parentLi.siblings().removeClass("active open");
+          parentLi.siblings().find("li").removeClass("active");
           parentLi.addClass("active open");
         }
       }
