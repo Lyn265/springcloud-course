@@ -11,6 +11,8 @@ import Teacher from "./views/admin/Teacher";
 import File from "./views/admin/File";
 import Content from "./views/admin/Content";
 import User from "./views/admin/User";
+import Resource from "./views/admin/Resource";
+import Role from "./views/admin/Role";
 
 
 Vue.use(Router);
@@ -31,6 +33,9 @@ export default new Router({
             path: '/',
             name:'admin',
             component:Admin,
+            meta:{
+                loginRequire:true
+            },
             children:[
                 {
                     path: 'welcome',
@@ -41,6 +46,16 @@ export default new Router({
                     path: 'system/user',
                     name:'system/user',
                     component:User
+                },
+                {
+                    path: 'system/resource',
+                    name:'system/resource',
+                    component:Resource
+                },
+                {
+                    path: '/system/role',
+                    name:'system/role',
+                    component:Role
                 },
 
                 {

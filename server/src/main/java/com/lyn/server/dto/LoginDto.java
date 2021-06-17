@@ -1,7 +1,7 @@
 package com.lyn.server.dto;
 
 
-public class UserDto {
+public class LoginDto {
 
     /**
      * id
@@ -18,14 +18,9 @@ public class UserDto {
      */
     private String name;
 
-    /**
-     * 密码
-     */
-    private String password;
 
-    private String imageCode;
+    private String token;
 
-    private String imageCodeToken;
 
     public String getId() {
         return id;
@@ -43,18 +38,6 @@ public class UserDto {
         this.loginName = loginName;
     }
 
-    public String getImageCode() {
-        return imageCode;
-    }
-
-    public String getImageCodeToken() {
-        return imageCodeToken;
-    }
-
-    public void setImageCodeToken(String imageCodeToken) {
-        this.imageCodeToken = imageCodeToken;
-    }
-
     public String getName() {
         return name;
     }
@@ -63,16 +46,22 @@ public class UserDto {
         this.name = name;
     }
 
-    public String getPassword() {
-        return password;
+    public String getToken() {
+        return token;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setToken(String token) {
+        this.token = token;
     }
 
-    public void setImageCode(String imageCode) {
-        this.imageCode = imageCode;
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("LoginDto{");
+        sb.append("id='").append(id).append('\'');
+        sb.append(", loginName='").append(loginName).append('\'');
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", token='").append(token).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
-
 }

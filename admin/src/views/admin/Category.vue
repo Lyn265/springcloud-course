@@ -382,7 +382,7 @@
         level1:[],
         level2:[],
         activeClass:-1,
-        active:{}
+        active:{},
       }
     },
     mounted() {

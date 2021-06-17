@@ -283,7 +283,7 @@
                 <img class="nav-user-photo" src="../../public/ace/assets/images/avatars/user.jpg" alt="Jason's Photo"/>
                 <span class="user-info">
                     <small>Welcome,</small>
-                    Jason
+                    {{loginUser.loginName}}
                   </span>
 
                 <i class="ace-icon fa fa-caret-down"></i>
@@ -293,7 +293,7 @@
                 <li>
                   <a href="#">
                     <i class="ace-icon fa fa-cog"></i>
-                    Settings
+                    系统设置
                   </a>
                 </li>
 
@@ -307,9 +307,9 @@
                 <li class="divider"></li>
 
                 <li>
-                  <a href="#">
+                  <a href="#" v-on:click="logout">
                     <i class="ace-icon fa fa-power-off"></i>
-                    Logout
+                    退出登录
                   </a>
                 </li>
               </ul>
@@ -375,13 +375,20 @@
                 </router-link>
                 <b class="arrow"></b>
               </li>
-              <li class="">
-                <a href="jqgrid.html">
+              <li class="" id="system-role-sidebar">
+                <router-link to="/system/role">
                   <i class="menu-icon fa fa-caret-right"></i>
-                  权限管理
-                </a>
+                  角色管理
+                </router-link>
                 <b class="arrow"></b>
               </li>
+              <li class="" id="system-resource-sidebar">
+              <router-link to="/system/resource">
+                <i class="menu-icon fa fa-caret-right"></i>
+                资源管理
+              </router-link>
+              <b class="arrow"></b>
+            </li>
             </ul>
           </li>
           <li class="">
@@ -494,14 +501,24 @@
 
 <script>
 
+  import {Tool} from "../utils/tool";
+  import {toast} from "../utils/toast";
+
   export default {
     name: "Admin",
+    data(){
+      return {
+        loginUser:{},
+      }
+    },
     mounted() {
       let _this = this;
       $('body').removeClass( 'login-layout light-login');
       $('body').attr( 'class','no-skin');
       _this.activeSidebar(this.$route.name.replace('/','-')+'-sidebar');
       $.getScript("/ace/assets/js/ace.min.js");
+       let user = Tool.getLoginUser();
+       _this.loginUser = user;
 
     },
     watch:{
@@ -529,6 +546,21 @@
           parentLi.siblings().find("li").removeClass("active");
           parentLi.addClass("active open");
         }
+      },
+      logout(){
+        let _this = this;
+        Loading.show();
+        _this.$api.get("/system/admin/user/logout/"+_this.loginUser.token).then(response =>{
+          Loading.hide();
+          let resp = response.data;
+          Tool.setLoginUser(resp.content);
+          if(resp.success){
+            Tool.setLoginUser(null);
+            this.$router.push('/login');
+          }else {
+            toast.warning(resp.msg);
+          }
+        })
       }
     }
 }

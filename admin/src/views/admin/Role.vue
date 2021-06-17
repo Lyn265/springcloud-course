@@ -16,30 +16,28 @@
         <thead>
           <tr>
             <th>id</th>
-            <th>登陆名</th>
-            <th>昵称</th>
-            <th>密码</th>
+            <th>角色</th>
+            <th>描述</th>
             <th>操作</th>
           </tr>
         </thead>
         <tbody>
-        <tr v-for="(user,index) in users" :key="index">
-              <td>{{user.id}}</td>
-              <td>{{user.loginName}}</td>
-              <td>{{user.name}}</td>
-              <td>{{user.password}}</td>
+        <tr v-for="(role,index) in roles" :key="index">
+              <td>{{role.id}}</td>
+              <td>{{role.name}}</td>
+              <td>{{role.desc}}</td>
           <td>
             <div class="hidden-sm hidden-xs btn-group">
-
-              <button class="btn btn-xs btn-info" @click="showEditPassword(user)">
-                <i class="ace-icon fa fa-key bigger-120"></i>
+              <button class="btn btn-xs btn-info" @click="editUser(role)">
+                <i class="ace-icon fa fa-user bigger-120"></i>
               </button>
-
-              <button class="btn btn-xs btn-info" @click="showEdit(user)">
+              <button class="btn btn-xs btn-info" @click="editResource(role)">
+                <i class="ace-icon fa fa-list bigger-120"></i>
+              </button>
+              <button class="btn btn-xs btn-info" @click="showEdit(role)">
                 <i class="ace-icon fa fa-pencil bigger-120"></i>
               </button>
-
-              <button class="btn btn-xs btn-danger" @click="remove(user.id)">
+              <button class="btn btn-xs btn-danger" @click="remove(role.id)">
                 <i class="ace-icon fa fa-trash-o bigger-120"></i>
               </button>
             </div>
@@ -197,21 +195,15 @@
           <div class="modal-body">
             <form class="form-horizontal">
                 <div class="form-group">
-                  <label class="col-sm-2 control-label">登陆名</label>
+                  <label class="col-sm-2 control-label">角色</label>
                   <div class="col-sm-10">
-                    <input v-model="user.loginName" type="text" class="form-control" placeholder="登陆名">
+                    <input v-model="role.name" type="text" class="form-control" placeholder="角色">
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="col-sm-2 control-label">昵称</label>
+                  <label class="col-sm-2 control-label">描述</label>
                   <div class="col-sm-10">
-                    <input v-model="user.name" type="text" class="form-control" placeholder="昵称">
-                  </div>
-                </div>
-                <div class="form-group" v-show="!user.id">
-                  <label class="col-sm-2 control-label">密码</label>
-                  <div class="col-sm-10">
-                    <input v-model="user.password" type="password" class="form-control" placeholder="密码">
+                    <input v-model="role.desc" type="text" class="form-control" placeholder="描述">
                   </div>
                 </div>
             </form>
@@ -223,27 +215,65 @@
         </div>
       </div>
     </div>
-    <!--修改密码 -->
-    <div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal fade" id="user-model" tabindex="-1" role="dialog" aria-labelledby="user-model">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="passwordModalLabel">课程</h4>
+            <h4 class="modal-title" id="user-model-label">角色用户关联配置</h4>
           </div>
           <div class="modal-body">
-            <form class="form-horizontal">
-              <div class="form-group">
-                <label class="col-sm-2 control-label">新密码</label>
-                <div class="col-sm-10">
-                  <input v-model="user.password" type="password" class="form-control" placeholder="新密码">
-                </div>
+            <div class="row">
+              <div class="col-md-6">
+                <table id="user-table" class="table table-hover">
+                  <tbody>
+                  <tr v-for="user in users">
+                    <td>{{user.loginName}}</td>
+                    <td class="text-right">
+                      <a v-on:click="addUser(user)" href="javascript:;" class="">
+                        <i class="ace-icon fa fa-arrow-circle-right blue"></i>
+                      </a>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
               </div>
-            </form>
+              <div class="col-md-6">
+                <table id="role-user-table" class="table table-hover">
+                  <tbody>
+                  <tr v-for="user in roleUsers">
+                    <td>{{user.loginName}}</td>
+                    <td class="text-right">
+                      <a v-on:click="deleteUser(user)" href="javascript:;" class="">
+                        <i class="ace-icon fa fa-trash blue"></i>
+                      </a>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-            <button type="button" class="btn btn-primary" @click="savePassword()">保存</button>
+            <button type="button" class="btn btn-primary" @click="saveUser()">保存</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="resource-model" tabindex="-1" role="dialog" aria-labelledby="resource-model">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="resource-model-label">角色资源关联配置</h4>
+          </div>
+          <div class="modal-body">
+            <ul id="tree" class="ztree"></ul>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-primary" @click="saveResource()">保存</button>
           </div>
         </div>
       </div>
@@ -256,16 +286,21 @@
   import {toast} from "../../utils/toast";
   import {Confirm} from "../../utils/confirm";
   import {Validator} from "../../utils/validator";
+  import {Tool} from "../../utils/tool";
 
   export default {
-    name: "User",
+    name: "Role",
     components:{
       Pagination,
     },
     data(){
       return {
-        user:{},
+        role:{},
+        roles:[],
+        tree:{},
+        resources:[],
         users:[],
+        roleUsers:[]
       }
     },
     mounted() {
@@ -277,7 +312,7 @@
       list(page){
         let _this = this;
         Loading.show();
-        _this.$api.post("/system/admin/user/list",
+        _this.$api.post("/system/admin/role/list",
           {
             page:page,
             size:_this.$refs.pagination.size
@@ -285,37 +320,190 @@
         ).then(response =>{
           Loading.hide();
           let resp = response.data;
-          this.users = resp.content.list;
+          this.roles = resp.content.list;
           _this.$refs.pagination.render(page,resp.content.total);
 
         })
       },
       showAdd(){
         let _this = this;
-        _this.user = {};
+        _this.role = {};
         $('#myModal').modal('show');
       },
-      showEdit(user){
+      showEdit(role){
         let _this = this;
-        _this.user = Object.assign({},user);
+        _this.role = Object.assign({},role);
         $('#myModal').modal('show');
+      },
+      editUser(role){
+        let _this = this;
+        _this.role = Object.assign({},role);
+        _this.listUser();
+        $('#user-model').modal('show');
+      },
+      /**
+       * 查询所有用户
+       */
+      listUser() {
+        let _this = this;
+        _this.$api.post('/system/admin/user/list', {
+          page: 1,
+          size: 9999
+        }).then((response)=>{
+          let resp = response.data;
+          if (resp.success) {
+            _this.users = resp.content.list;
+            _this.listRoleUser();
+          } else {
+            toast.warning(resp.message);
+          }
+        })
+      },
+      addUser(user){
+        let _this = this;
+        let roleUsers = _this.roleUsers;
+        for (let i = 0; i <roleUsers.length ; i++) {
+            if(user === roleUsers[i]){
+              toast.warning("已添加该用户");
+              return ;
+            }
+        }
+          _this.roleUsers.push(user);
+      },
+      deleteUser(user){
+        let _this = this;
+        Tool.removeObj(_this.roleUsers,user);
+      },
+      listRoleUser(){
+        let _this = this;
+        _this.roleUsers = [];
+        _this.$api.get("/system/admin/role/list-user/"+_this.role.id).then(response =>{
+          let resp = response.data;
+          let userIds = resp.content;
+          for (let i = 0; i <userIds.length ; i++) {
+            for (let j = 0; j <_this.users.length ; j++) {
+              if(userIds[i] === _this.users[j].id){
+                _this.roleUsers.push(_this.users[j]);
+              }
+            }
+          }
+        })
+      },
+      saveUser(){
+        let _this = this;
+        let roleId = _this.role.id;
+        let userIds = [];
+        Loading.show();
+        for (let i = 0; i <_this.roleUsers.length ; i++) {
+            userIds.push(_this.roleUsers[i].id);
+        }
+        _this.$api.post("/system/admin/role/save-user",{
+          id:roleId,
+          userIds:userIds
+        }).then(response =>{
+          Loading.hide();
+          let resp = response.data;
+          if(resp.success){
+            toast.success("保存成功");
+            $('#resource-model').modal('hide');
+          }else {
+            toast.warning(resp.msg);
+          }
+        })
+
+      },
+      editResource(role){
+        let _this = this;
+        _this.role = $.extend({},role);
+        _this.loadResource(role);
+        $('#resource-model').modal('show');
+
+      },
+      loadResource(){
+        let _this = this;
+        Loading.show();
+        _this.$api.get("/system/admin/resource/load-tree").then(response =>{
+          Loading.hide();
+          let resp = response.data;
+          this.resources = resp.content;
+          _this.initTree();
+          _this.listRoleResource();
+        })
+
+      },
+      initTree(){
+        let _this = this;
+        let setting = {
+          check:{
+            enable:true
+          },
+          data: {
+            simpleData: {
+              idKey: "id",
+              pIdKey: "parent",
+              rootPId: "",
+            }
+          }
+        };
+        _this.tree = $.fn.zTree.init($("#tree"), setting, _this.resources);
+        _this.tree.expandAll(true);
+      },
+      listRoleResource(){
+        let _this = this;
+        _this.$api.post("/system/admin/role/list-resource/"+_this.role.id
+        ).then(response =>{
+          let resp = response.data;
+          if(resp.success){
+            let resources = resp.content;
+            _this.tree.checkAllNodes(false);
+            for (let i = 0; i <resources.length ; i++) {
+             let node =  _this.tree.getNodeByParam('id',resources[i]);
+              _this.tree.checkNode(node,true);
+            }
+          }else {
+            toast.warning(resp.msg);
+          }
+        })
+      },
+      saveResource(){
+        let _this = this;
+        let roleId = _this.role.id;
+        const resources = _this.tree.getCheckedNodes();
+        let resourceIds = [];
+        for (let i = 0; i <resources.length ; i++) {
+          resourceIds.push(resources[i].id);
+        }
+        console.log("勾选的资源:",resources);
+        Loading.show();
+        _this.$api.post("/system/admin/role/save-resource",{
+          id:roleId,
+          resourceIds:resourceIds
+        }).then(response =>{
+          Loading.hide();
+          let resp = response.data;
+          if(resp.success){
+            toast.success("保存成功");
+            $('#resource-model').modal('hide');
+          }else {
+            toast.warning(resp.msg);
+          }
+        })
       },
       save(){
         let _this = this;
         // 保存校验
         if (1 != 1
-          || !Validator.require(_this.user.loginName, "登陆名")
-          || !Validator.length(_this.user.loginName, "登陆名", 1, 50)
-          || !Validator.length(_this.user.name, "昵称", 1, 50)
-          || !Validator.require(_this.user.password, "密码")
+          || !Validator.require(_this.role.name, "角色")
+          || !Validator.length(_this.role.name, "角色", 1, 50)
+          || !Validator.require(_this.role.desc, "描述")
+          || !Validator.length(_this.role.desc, "描述", 1, 100)
         ) {
           return;
         }
 
         Loading.show();
-        _this.user.password = hex_md5(_this.user.password + KEY);
-        _this.$api.post("/system/admin/user/save",
-          _this.user,
+        _this.$api.post("/system/admin/role/save",
+          _this.role,
         ).then(resp =>{
           Loading.hide();
           let response = resp.data;
@@ -328,43 +516,11 @@
           }
         })
       },
-      showEditPassword(user){
-        let _this = this;
-        _this.user.id = user.id;
-        $('#passwordModal').modal('show');
-      },
-      savePassword(){
-        let _this = this;
-        // 保存校验
-        // if (1 != 1
-        //   || !Validator.require(_this.user.loginName, "登陆名")
-        //   || !Validator.length(_this.user.loginName, "登陆名", 1, 50)
-        //   || !Validator.length(_this.user.name, "昵称", 1, 50)
-        //   || !Validator.require(_this.user.password, "密码")
-        // ) {
-        //   return;
-        // }
-        Loading.show();
-        _this.user.password = hex_md5(_this.user.password + KEY);
-        _this.$api.post("/system/admin/user/save-password",
-          _this.user,
-        ).then(resp =>{
-          Loading.hide();
-          let response = resp.data;
-          if(response.success){
-            $('#passwordModal').modal('hide');
-            _this.list(1);
-            toast.success("保存成功");
-          }else {
-            toast.warning(response.msg);
-          }
-        })
-      },
       remove(id){
         let _this = this;
         Confirm.show('删除后不可恢复，确认删除？',function () {
           Loading.show();
-          _this.$api.delete("/system/admin/user/delete/"+id
+          _this.$api.delete("/system/admin/role/delete/"+id
           ).then(resp =>{
             Loading.hide();
             let response = resp.data;

@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lyn.server.domain.User;
 import com.lyn.server.domain.UserExample;
+import com.lyn.server.dto.LoginDto;
 import com.lyn.server.dto.UserDto;
 import com.lyn.server.dto.PageDto;
 import com.lyn.server.enums.BusinessExceptionCode;
@@ -57,7 +58,8 @@ public class UserService {
         userMapper.insert(user);
     }
     private void update(User user) {
-        userMapper.updateByPrimaryKey(user);
+        user.setPassword(null);
+        userMapper.updateByPrimaryKeySelective(user);
     }
 
     public void delete(String id) {
@@ -72,6 +74,25 @@ public class UserService {
             return null;
         }else{
             return users.get(0);
+        }
+    }
+
+    public void savePassword(UserDto userDto) {
+        User user = new User();
+        user.setId(userDto.getId());
+        user.setPassword(userDto.getPassword());
+        userMapper.updateByPrimaryKeySelective(user);
+    }
+    public LoginDto login(UserDto userDto){
+        User userDb = selectByLoginName(userDto.getLoginName());
+        if(userDb == null){
+            throw new BusinessException(BusinessExceptionCode.USER_LOGIN_NAME_NOT_EXIST);
+        }else {
+            if(userDb.getPassword().equals(userDto.getPassword())){
+                return CopyUtil.copy(userDb,LoginDto.class);
+            }else{
+                throw new BusinessException(BusinessExceptionCode.USER_LOGIN_NAME_NOT_EXIST);
+            }
         }
     }
 }
