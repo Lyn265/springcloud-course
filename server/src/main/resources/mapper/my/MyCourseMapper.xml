@@ -36,5 +36,11 @@
         and id != #{sortDto.id}
     ]]>
     </update>
+    <select id="findResources" resultType="com.lyn.server.dto.ResourceDto">
+        select distinct r.id,r.name,r.page,r.request,r.parent
+         from role_user ru,role_resource rr,resource r
+        where ru.user_id = #{userId} and ru.role_id = rr.role_id and rr.resource_id = r.id
+        order by r.id asc
+    </select>
 
 </mapper>

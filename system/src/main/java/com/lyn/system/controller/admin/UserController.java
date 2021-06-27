@@ -1,7 +1,7 @@
 package com.lyn.system.controller.admin;
 
 import com.alibaba.fastjson.JSON;
-import com.lyn.server.dto.LoginDto;
+import com.lyn.server.dto.LoginUserDto;
 import com.lyn.server.dto.PageDto;
 import com.lyn.server.dto.ResponseDto;
 import com.lyn.server.dto.UserDto;
@@ -46,12 +46,12 @@ public class UserController {
         }
         String pwd = DigestUtils.md5DigestAsHex(userDto.getPassword().getBytes());
         userDto.setPassword(pwd);
-        LoginDto loginDto = userService.login(userDto);
+        LoginUserDto loginUserDto = userService.login(userDto);
 //        request.getSession().setAttribute("loginUser",loginDto);
         String token = UuidUtil.getShortUuid();
-        loginDto.setToken(token);
-        redisTemplate.opsForValue().set(token, JSON.toJSONString(loginDto), 3600, TimeUnit.SECONDS);
-        responseDto.setContent(loginDto);
+        loginUserDto.setToken(token);
+        redisTemplate.opsForValue().set(token, JSON.toJSONString(loginUserDto), 3600, TimeUnit.SECONDS);
+        responseDto.setContent(loginUserDto);
          return responseDto;
     }
 

@@ -297,7 +297,7 @@
       return {
         role:{},
         roles:[],
-        tree:{},
+        ztree:{},
         resources:[],
         users:[],
         roleUsers:[]
@@ -442,11 +442,12 @@
               idKey: "id",
               pIdKey: "parent",
               rootPId: "",
+              enable: true
             }
           }
         };
-        _this.tree = $.fn.zTree.init($("#tree"), setting, _this.resources);
-        _this.tree.expandAll(true);
+        _this.ztree = $.fn.zTree.init($("#tree"), setting, _this.resources);
+        _this.ztree.expandAll(true);
       },
       listRoleResource(){
         let _this = this;
@@ -455,10 +456,10 @@
           let resp = response.data;
           if(resp.success){
             let resources = resp.content;
-            _this.tree.checkAllNodes(false);
+            _this.ztree.checkAllNodes(false);
             for (let i = 0; i <resources.length ; i++) {
-             let node =  _this.tree.getNodeByParam('id',resources[i]);
-              _this.tree.checkNode(node,true);
+             let node =  _this.ztree.getNodeByParam('id',resources[i]);
+              _this.ztree.checkNode(node,true);
             }
           }else {
             toast.warning(resp.msg);
@@ -468,7 +469,7 @@
       saveResource(){
         let _this = this;
         let roleId = _this.role.id;
-        const resources = _this.tree.getCheckedNodes();
+        const resources = _this.ztree.getCheckedNodes();
         let resourceIds = [];
         for (let i = 0; i <resources.length ; i++) {
           resourceIds.push(resources[i].id);

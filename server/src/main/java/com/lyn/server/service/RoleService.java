@@ -69,7 +69,7 @@ public class RoleService {
             String roleId = roleDto.getId();
             List<String> resourceIds = roleDto.getResourceIds();
             RoleResourceExample example = new RoleResourceExample();
-            example.createCriteria().andIdEqualTo(roleId);
+            example.createCriteria().andRoleIdEqualTo(roleId);
             roleResourceMapper.deleteByExample(example);
 
             for (int i = 0; i <resourceIds.size() ; i++) {
@@ -108,7 +108,7 @@ public class RoleService {
         String roleId = roleDto.getId();
         List<String> userIds = roleDto.getUserIds();
         RoleUserExample example = new RoleUserExample();
-        example.createCriteria().andIdEqualTo(roleId);
+        example.createCriteria().andRoleIdEqualTo(roleId);
         roleUserMapper.deleteByExample(example);
 
         for (int i = 0; i <userIds.size() ; i++) {

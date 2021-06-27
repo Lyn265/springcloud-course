@@ -12,4 +12,5 @@ public interface MyCourseMapper {
     void moveSortForward(@Param("sortDto") SortDto sortDto);
 
     void moveSortBackward(@Param("sortDto") SortDto sortDto);
+
 }

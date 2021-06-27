@@ -368,31 +368,31 @@
             </a>
             <b class="arrow"></b>
             <ul class="submenu">
-              <li class="" id="system-user-sidebar">
+              <li class="" id="system-user-sidebar" v-show="hasResource('01')">
                 <router-link to="/system/user">
                   <i class="menu-icon fa fa-caret-right"></i>
                   用户管理
                 </router-link>
                 <b class="arrow"></b>
               </li>
-              <li class="" id="system-role-sidebar">
+              <li class="" id="system-resource-sidebar" v-show="hasResource('0102')">
+              <router-link to="/system/resource">
+                <i class="menu-icon fa fa-caret-right"></i>
+                资源管理
+              </router-link>
+              <b class="arrow"></b>
+              </li>
+              <li class="" id="system-role-sidebar" v-show="hasResource('0103')">
                 <router-link to="/system/role">
                   <i class="menu-icon fa fa-caret-right"></i>
                   角色管理
                 </router-link>
                 <b class="arrow"></b>
               </li>
-              <li class="" id="system-resource-sidebar">
-              <router-link to="/system/resource">
-                <i class="menu-icon fa fa-caret-right"></i>
-                资源管理
-              </router-link>
-              <b class="arrow"></b>
-            </li>
             </ul>
           </li>
           <li class="">
-            <a href="#" class="dropdown-toggle">
+            <a href="#" class="dropdown-toggle" v-show="hasResource('02')">
               <i class="menu-icon fa fa-list"></i>
               <span class="menu-text"> 业务管理 </span>
               <b class="arrow fa fa-angle-down"></b>
@@ -430,7 +430,7 @@
               </li>
             </ul>
           </li>
-          <li class="">
+          <li class="" v-show="hasResource('03')">
             <a href="#" class="dropdown-toggle">
               <i class="menu-icon fa fa-list"></i>
               <span class="menu-text"> 文件管理 </span>
@@ -519,13 +519,20 @@
       $.getScript("/ace/assets/js/ace.min.js");
        let user = Tool.getLoginUser();
        _this.loginUser = user;
+      if(!_this.hasResourceRouter(_this.$route.name)){
+        _this.$router.push("/login");
+      }
 
     },
     watch:{
       $route:{
         handler:function (val,oldVal) {
-          console.log("页面跳转:",val,oldVal);
           let _this = this;
+          if(!_this.hasResourceRouter(val.name)){
+            _this.$router.push("/login");
+            return;
+          }
+          console.log("页面跳转:",val,oldVal);
               _this.$nextTick(function () {
               _this.activeSidebar(this.$route.name.replace('/','-')+'-sidebar');
           })
@@ -533,6 +540,22 @@
     },
   },
     methods:{
+      hasResourceRouter(router){
+        let resources = Tool.getLoginUser().resources;
+        console.log(resources);
+        if(Tool.isEmpty(resources)){
+          return false;
+        }
+        for (let i = 0; i < resources.length; i++) {
+            if(router === resources[i].page){
+              return true;
+            }
+        }
+        return false;
+      },
+      hasResource(id){
+        return Tool.hasResource(id);
+      },
       //菜单激活样式,id是当前点击菜单的id
       activeSidebar(id){
         //兄弟菜单去掉active样式，自己增加active样式

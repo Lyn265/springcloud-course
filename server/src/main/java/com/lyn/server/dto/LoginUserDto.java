@@ -1,7 +1,10 @@
 package com.lyn.server.dto;
 
 
-public class LoginDto {
+import java.util.HashSet;
+import java.util.List;
+
+public class LoginUserDto {
 
     /**
      * id
@@ -20,6 +23,10 @@ public class LoginDto {
 
 
     private String token;
+    //后端所有资源,用于前端界面控制
+    private List<ResourceDto> resources;
+    //前端接口，用户后端接口拦截
+    private HashSet<String>requests;
 
 
     public String getId() {
@@ -54,6 +61,22 @@ public class LoginDto {
         this.token = token;
     }
 
+    public List<ResourceDto> getResources() {
+        return resources;
+    }
+
+    public void setResources(List<ResourceDto> resources) {
+        this.resources = resources;
+    }
+
+    public HashSet<String> getRequests() {
+        return requests;
+    }
+
+    public void setRequests(HashSet<String> requests) {
+        this.requests = requests;
+    }
+
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer("LoginDto{");
@@ -61,6 +84,8 @@ public class LoginDto {
         sb.append(", loginName='").append(loginName).append('\'');
         sb.append(", name='").append(name).append('\'');
         sb.append(", token='").append(token).append('\'');
+        sb.append(", resources=").append(resources);
+        sb.append(", requests=").append(requests);
         sb.append('}');
         return sb.toString();
     }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <p>
-      <button class="btn btn-white btn-default btn-round" @click="showAdd()">
+      <button v-show="hasResource('010101')" class="btn btn-white btn-default btn-round" @click="showAdd()">
         <i class="ace-icon fa fa-edit"></i>
         新增
       </button>
@@ -31,15 +31,15 @@
           <td>
             <div class="hidden-sm hidden-xs btn-group">
 
-              <button class="btn btn-xs btn-info" @click="showEditPassword(user)">
+              <button v-show="hasResource('010103')" class="btn btn-xs btn-info" @click="showEditPassword(user)">
                 <i class="ace-icon fa fa-key bigger-120"></i>
               </button>
 
-              <button class="btn btn-xs btn-info" @click="showEdit(user)">
+              <button v-show="hasResource('010101')" class="btn btn-xs btn-info" @click="showEdit(user)">
                 <i class="ace-icon fa fa-pencil bigger-120"></i>
               </button>
 
-              <button class="btn btn-xs btn-danger" @click="remove(user.id)">
+              <button v-show="hasResource('010102')" class="btn btn-xs btn-danger" @click="remove(user.id)">
                 <i class="ace-icon fa fa-trash-o bigger-120"></i>
               </button>
             </div>
@@ -256,6 +256,7 @@
   import {toast} from "../../utils/toast";
   import {Confirm} from "../../utils/confirm";
   import {Validator} from "../../utils/validator";
+  import {Tool} from "../../utils/tool";
 
   export default {
     name: "User",
@@ -274,6 +275,9 @@
 
     },
     methods:{
+      hasResource(id){
+        return Tool.hasResource(id);
+      },
       list(page){
         let _this = this;
         Loading.show();

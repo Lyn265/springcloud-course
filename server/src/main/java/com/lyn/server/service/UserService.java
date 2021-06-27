@@ -1,15 +1,18 @@
 package com.lyn.server.service;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lyn.server.domain.User;
 import com.lyn.server.domain.UserExample;
-import com.lyn.server.dto.LoginDto;
+import com.lyn.server.dto.LoginUserDto;
+import com.lyn.server.dto.ResourceDto;
 import com.lyn.server.dto.UserDto;
 import com.lyn.server.dto.PageDto;
 import com.lyn.server.enums.BusinessExceptionCode;
 import com.lyn.server.exception.BusinessException;
 import com.lyn.server.mapper.UserMapper;
+import com.lyn.server.mapper.my.MyUserMapper;
 import com.lyn.server.util.CopyUtil;
 import com.lyn.server.util.UuidUtil;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -24,6 +28,9 @@ import java.util.List;
 public class UserService {
     @Resource
     UserMapper userMapper;
+
+    @Resource
+    MyUserMapper myUserMapper;
 
     public void list(PageDto pageDto) {
         PageHelper.startPage(pageDto.getPage(),pageDto.getSize());
@@ -83,16 +90,34 @@ public class UserService {
         user.setPassword(userDto.getPassword());
         userMapper.updateByPrimaryKeySelective(user);
     }
-    public LoginDto login(UserDto userDto){
+    public LoginUserDto login(UserDto userDto){
         User userDb = selectByLoginName(userDto.getLoginName());
         if(userDb == null){
             throw new BusinessException(BusinessExceptionCode.USER_LOGIN_NAME_NOT_EXIST);
         }else {
             if(userDb.getPassword().equals(userDto.getPassword())){
-                return CopyUtil.copy(userDb,LoginDto.class);
+                LoginUserDto loginUserDto = CopyUtil.copy(userDb, LoginUserDto.class);
+                setAuth(loginUserDto);
+                return loginUserDto;
             }else{
                 throw new BusinessException(BusinessExceptionCode.USER_LOGIN_NAME_NOT_EXIST);
             }
         }
+    }
+    private void setAuth(LoginUserDto loginUserDto){
+        List<ResourceDto> resourceList = myUserMapper.findResources(loginUserDto.getId());
+        loginUserDto.setResources(resourceList);
+        HashSet<String>requestSet = new HashSet<>();
+        if(!CollectionUtils.isEmpty(resourceList)){
+            for (int i = 0; i < resourceList.size(); i++) {
+                ResourceDto resourceDto = resourceList.get(i);
+                List<String> requestStr = JSON.parseArray(resourceDto.getRequest(), String.class);
+                if(!CollectionUtils.isEmpty(requestStr)){
+                    requestSet.addAll(requestStr);
+                }
+            }
+        }
+        loginUserDto.setRequests(requestSet);
+
     }
 }

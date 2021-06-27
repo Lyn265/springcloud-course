@@ -1,5 +1,8 @@
 package com.lyn.gateway.filter;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -45,6 +48,24 @@ public class LoginAdminGatewayFilter implements GatewayFilter, Ordered {
             return exchange.getResponse().setComplete();
         } else {
             LOG.info("登录拦截开始,token:{}", token);
+            //增加权限校验，gateway里没有LoginUserDto，所以全部用json操作
+            boolean exist = false;
+            JSONObject jsonLoginObj = JSON.parseObject(String.valueOf(obj));
+            JSONArray requestsArr = jsonLoginObj.getJSONArray("requests");
+            for (int i = 0; i < requestsArr.size(); i++) {
+                String  str = requestsArr.get(i).toString();
+                if(path.contains(str)){
+                    exist = true;
+                    break;
+                }
+            }
+            if(exist){
+                LOG.info("校验通过");
+            }else {
+                LOG.warn("校验未授权");
+                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+                return exchange.getResponse().setComplete();
+            }
             return chain.filter(exchange);
         }
     }
